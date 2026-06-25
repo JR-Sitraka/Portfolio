@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-lab: #f6f5f0;
+  --color-text-primary: #122419;
+  --color-text-secondary: #4a574e;
+  --color-border-lab: rgba(18, 36, 25, 0.10);
+
+  --shadow-card: 0 1px 4px rgba(18, 36, 25, 0.08);
+  --shadow-card-hover: 0 6px 20px rgba(18, 36, 25, 0.14);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+}
+
+body {
+  background-color: #f6f5f0;
+  color: #122419;
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
