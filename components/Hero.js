@@ -5,50 +5,139 @@ export default function Hero() {
   const { profile } = portfolioData;
   const shouldReduceMotion = useReducedMotion();
 
-  const entranceTransition = {
+  const entranceBase = {
     ease: [0.25, 0.1, 0.25, 1],
     duration: shouldReduceMotion ? 0 : 0.5,
   };
 
+  const initialState   = shouldReduceMotion ? {} : { opacity: 0, y: 20 };
+  const animatedState  = shouldReduceMotion ? {} : { opacity: 1, y: 0 };
+
   return (
-    <section className="mx-auto max-w-6xl px-6 py-12 md:py-24">
-      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
-        {/* Column A: Text Side (7 cols on desktop) */}
+    <section
+      style={{
+        backgroundColor: "var(--color-primary)",
+        color: "var(--color-text-on-dark)",
+        width: "100%",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "96px 64px",
+          display: "grid",
+          gridTemplateColumns: "55fr 45fr",
+          gap: "64px",
+          alignItems: "center",
+        }}
+        className="hero-grid"
+      >
+        {/* ── Column A: Text ── */}
         <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, y: 16 }}
-          animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-          transition={entranceTransition}
-          className="lg:col-span-7 flex flex-col gap-6"
+          initial={initialState}
+          animate={animatedState}
+          transition={entranceBase}
+          style={{ display: "flex", flexDirection: "column", gap: "24px" }}
         >
-          {/* Pre-headline */}
-          <span className="font-mono text-xs font-semibold tracking-wider text-text-secondary uppercase">
-            👋 Hello there, I'm {profile.name}
+          {/* Pre-headline label */}
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.75rem",
+              fontWeight: 500,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: "var(--color-text-secondary)",
+            }}
+          >
+            👋 Hello there, I&apos;m {profile.name}
           </span>
 
-          {/* Stark Headline */}
-          <h1 className="font-display text-4xl font-extrabold tracking-tight text-text-primary sm:text-5xl md:text-6xl uppercase leading-none">
+          {/* Main headline */}
+          <h1
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "4.5rem",
+              fontWeight: 700,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.0,
+              color: "var(--color-text-on-dark)",
+              margin: 0,
+              textTransform: "uppercase",
+            }}
+            className="hero-headline"
+          >
             {profile.title}
           </h1>
 
-          {/* Editorial Paragraph */}
-          <p className="max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">
+          {/* Subtext */}
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "1.125rem",
+              lineHeight: 1.75,
+              color: "var(--color-text-secondary)",
+              maxWidth: "520px",
+              margin: 0,
+            }}
+          >
             {profile.subtext}
           </p>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap gap-4 pt-2">
+          {/* Action buttons */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", paddingTop: "8px" }}>
+            {/* Primary CTA */}
             <a
               href="#projects"
-              className="inline-flex h-12 items-center justify-center bg-text-primary px-6 font-mono text-xs font-bold uppercase tracking-wider text-bg-lab transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              className="btn-primary"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "var(--color-accent)",
+                color: "var(--color-primary)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                padding: "12px 28px",
+                borderRadius: "4px",
+                border: "none",
+                transition: "background-color 200ms ease",
+                cursor: "pointer",
+              }}
             >
               Explore Projects
             </a>
+
+            {/* Outline CTA */}
             {profile.githubUrl && (
               <a
                 href={profile.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center border border-text-primary bg-transparent px-6 font-mono text-xs font-bold uppercase tracking-wider text-text-primary transition-transform hover:scale-[1.02] hover:bg-text-primary/5 active:scale-[0.98]"
+                className="btn-outline"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "transparent",
+                  color: "var(--color-text-on-dark)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  padding: "12px 28px",
+                  borderRadius: "4px",
+                  border: "1px solid var(--color-text-on-dark)",
+                  transition: "background-color 200ms ease",
+                  cursor: "pointer",
+                }}
               >
                 View Repository
               </a>
@@ -56,53 +145,90 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Column B: Profile Visual (5 cols on desktop) */}
         <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, y: 16 }}
-          animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-          transition={{ ...entranceTransition, delay: shouldReduceMotion ? 0 : 0.1 }}
-          className="lg:col-span-5 flex justify-center items-center"
+          initial={initialState}
+          animate={animatedState}
+          transition={{ ...entranceBase, delay: shouldReduceMotion ? 0 : 0.15 }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+          }}
         >
-          {/* Asymmetric Profile Frame & Accent Circles */}
-          <div className="relative h-64 w-64 sm:h-80 sm:w-80">
-            {/* Background Accent 1: Dashed Circle */}
-            <div className="absolute -top-4 -left-4 h-24 w-24 rounded-full border border-dashed border-text-primary/20" />
-            
-            {/* Background Accent 2: Thin Muted Circle */}
-            <div className="absolute -bottom-6 -right-6 h-32 w-32 rounded-full border border-text-primary/10" />
-
-            {/* Main Asymmetric Image Container */}
-            <div className="relative h-full w-full overflow-hidden border border-text-primary/15 bg-text-primary/5 shadow-card transition-all duration-300 hover:shadow-card-hover rounded-2xl rotate-2 hover:rotate-0">
-              <img
-                src={profile.avatarUrl}
-                alt={profile.name}
-                className="h-full w-full object-cover grayscale contrast-125 transition-all duration-500 hover:scale-105 hover:grayscale-0"
-                onError={(e) => {
-                  // If image fails to load (since it is a placeholder), display a premium monogram backup
-                  e.target.style.display = 'none';
-                  const parent = e.target.parentNode;
-                  const fallback = document.getElementById('profile-fallback');
-                  if (fallback) fallback.style.display = 'flex';
+          {/*
+            profile-image-wrapper: structural rules in globals.css,
+            critical clip-path also set inline for guaranteed specificity.
+          */}
+          <div
+            className="profile-image-wrapper"
+            style={{
+              aspectRatio: "2 / 3",
+              width: "100%",
+              maxWidth: "380px",
+              clipPath: "polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%)",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center top",
+                transform: "scaleX(1.12)",
+                display: "block",
+              }}
+              onError={(e) => {
+                e.target.style.display = "none";
+                const fallback = e.target.nextElementSibling;
+                if (fallback) fallback.style.display = "flex";
+              }}
+            />
+            {/* Fallback monogram */}
+            <div
+              className="profile-fallback"
+              style={{
+                display: "none",
+                position: "absolute",
+                inset: 0,
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "var(--color-text-secondary)",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "4rem",
+                  fontWeight: 700,
+                  color: "var(--color-text-on-dark)",
+                  letterSpacing: "0.1em",
                 }}
-              />
-              
-              {/* Premium Fallback UI */}
-              <div
-                id="profile-fallback"
-                style={{ display: 'none' }}
-                className="absolute inset-0 flex flex-col items-center justify-center bg-text-primary p-6 text-center text-bg-lab"
               >
-                <span className="font-display text-6xl font-bold tracking-widest mb-2">
-                  {profile.initials}
-                </span>
-                <span className="font-mono text-[10px] tracking-widest uppercase opacity-60">
-                  SYSTEM CORE INITIALIZED
-                </span>
-              </div>
+                {profile.initials}
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.625rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "var(--color-text-on-dark)",
+                  opacity: 0.6,
+                  marginTop: "8px",
+                }}
+              >
+                SYSTEM CORE INITIALIZED
+              </span>
             </div>
           </div>
         </motion.div>
       </div>
+
     </section>
   );
 }

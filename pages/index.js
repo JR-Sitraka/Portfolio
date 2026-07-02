@@ -30,52 +30,90 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex min-h-screen flex-col bg-bg-lab selection:bg-text-primary selection:text-bg-lab">
+      <div style={{ display: "flex", minHeight: "100vh", flexDirection: "column" }}>
         {/* Navigation Header */}
         <Nav />
 
         {/* Core Layout Containers */}
-        <main className="flex-grow">
+        <main style={{ flex: 1, backgroundColor: "var(--color-surface)" }}>
           {/* Hero Section */}
           <Hero />
 
           {/* Selected Experiments Section */}
           <section
             id="projects"
-            className="mx-auto max-w-6xl px-6 py-12 md:py-24 border-t border-text-primary/10"
+            style={{ borderTop: "1px solid var(--color-border-light)" }}
           >
-            <h2 className="mb-12 font-mono text-xs font-bold uppercase tracking-widest text-text-primary">
-              01 // SELECTED EXPERIMENTS
-            </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
+            <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "96px 64px" }} className="section-inner">
+              <h2
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--color-text-secondary)",
+                  marginBottom: "48px",
+                }}
+              >
+                <span style={{ color: "var(--color-text-secondary)" }}>01</span>
+                {" "}
+                <span style={{ color: "var(--color-text-primary)" }}>// SELECTED EXPERIMENTS</span>
+              </h2>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {projects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
             </div>
           </section>
 
           {/* System Layer Manifest Section */}
           <section
             id="stack"
-            className="mx-auto max-w-6xl px-6 py-12 md:py-24 border-t border-text-primary/10"
+            style={{ borderTop: "1px solid var(--color-border-light)" }}
           >
-            <h2 className="mb-12 font-mono text-xs font-bold uppercase tracking-widest text-text-primary">
-              02 // SYSTEM LAYER MANIFEST
-            </h2>
-            
-            <div className="flex flex-col gap-12">
-              {stackRows.map((row, index) => (
-                <div key={index} className="flex flex-col gap-4">
-                  <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                    {row.label}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-                    {row.items.map((tech, techIdx) => (
-                      <TechCard key={techIdx} tech={tech} />
-                    ))}
+            <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "96px 64px" }} className="section-inner">
+              <h2
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--color-text-secondary)",
+                  marginBottom: "48px",
+                }}
+              >
+                <span style={{ color: "var(--color-text-secondary)" }}>02</span>
+                {" "}
+                <span style={{ color: "var(--color-text-primary)" }}>// SYSTEM LAYER MANIFEST</span>
+              </h2>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
+                {stackRows.map((row, index) => (
+                  <div key={index} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    <h3
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "0.75rem",
+                        fontWeight: 500,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "var(--color-text-secondary)",
+                        margin: 0,
+                      }}
+                    >
+                      {row.label}
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+                      {row.items.map((tech, techIdx) => (
+                        <TechCard key={techIdx} tech={tech} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
 
@@ -86,6 +124,7 @@ export default function Home() {
         {/* Footer Connections */}
         <Footer />
       </div>
+
     </>
   );
 }

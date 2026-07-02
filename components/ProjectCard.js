@@ -4,24 +4,31 @@ export default function ProjectCard({ project }) {
   const { title, category, status, tech, description, liveLink, githubLink } = project;
   const shouldReduceMotion = useReducedMotion();
 
-  // Map status values to specific laboratory color tokens
+  // Get inline style colors for status badges per DESIGN.md
   const getStatusStyles = (statusVal) => {
     switch (statusVal) {
       case "Live":
-        return "bg-[#dde8d0] text-[#122419] border border-[#122419]/20";
+        return {
+          backgroundColor: "var(--color-tag-live-bg)",
+          color: "var(--color-tag-live-text)",
+        };
       case "In Development":
-        return "bg-[#f9ebd1] text-[#825c14] border border-[#825c14]/20";
+        return {
+          backgroundColor: "var(--color-tag-dev-bg)",
+          color: "var(--color-tag-dev-text)",
+        };
       case "Planned Concept":
       default:
-        return "bg-[#e2e0d8] text-[#4a574e] border border-[#4a574e]/20";
+        return {
+          backgroundColor: "var(--color-tag-planned-bg)",
+          color: "var(--color-tag-planned-text)",
+        };
     }
   };
 
-  // Check if both links are null to hide the button row
   const hasLinks = liveLink !== null || githubLink !== null;
 
   return (
-
     <motion.div
       initial={shouldReduceMotion ? {} : { opacity: 0, y: 16 }}
       whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
@@ -30,44 +37,114 @@ export default function ProjectCard({ project }) {
         shouldReduceMotion
           ? {}
           : {
-            y: -4,
-            boxShadow: "0 6px 20px rgba(18, 36, 25, 0.14)", // shadow-card-hover
-          }
+              y: -4,
+              backgroundColor: "var(--color-surface-alt)",
+              boxShadow: "0 8px 30px rgba(0, 0, 0, 0.08)",
+            }
       }
       transition={{
         ease: [0.25, 0.1, 0.25, 1],
         duration: shouldReduceMotion ? 0 : 0.3,
       }}
-      className="flex flex-col justify-between border border-text-primary/10 bg-bg-lab p-6 shadow-card transition-shadow duration-300"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        backgroundColor: "#ffffff",
+        border: "1px solid var(--color-border-light)",
+        borderRadius: "var(--radius-md)",
+        padding: "28px",
+        transition: "background-color 300ms ease, box-shadow 300ms ease, transform 300ms ease",
+      }}
     >
       <div>
         {/* Metadata Row */}
-        <div className="mb-4 flex items-center justify-between font-mono text-[10px] tracking-wider uppercase">
-          <span className="text-text-secondary">{category}</span>
-          <span className={`px-2 py-0.5 rounded-sm font-semibold ${getStatusStyles(status)}`}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.7rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: "16px",
+          }}
+        >
+          <span style={{ color: "var(--color-text-secondary)" }}>{category}</span>
+          <span
+            style={{
+              padding: "2px 10px",
+              borderRadius: "var(--radius-full)",
+              fontWeight: 500,
+              fontSize: "0.65rem",
+              letterSpacing: "0.04em",
+              ...getStatusStyles(status),
+            }}
+          >
             {status}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="font-display text-lg font-bold text-text-primary uppercase tracking-tight">
+        <h3
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "1.25rem", // h3 size from DESIGN.md
+            fontWeight: 600,
+            lineHeight: 1.3,
+            color: "var(--color-text-primary)",
+            textTransform: "uppercase",
+            letterSpacing: "-0.01em",
+            margin: "0 0 12px 0",
+          }}
+        >
           {title}
         </h3>
 
         {/* Divider */}
-        <hr className="my-3 border-t border-text-primary/10" />
+        <hr
+          style={{
+            border: 0,
+            borderTop: "1px solid var(--color-border-light)",
+            margin: "0 0 16px 0",
+          }}
+        />
 
         {/* Description */}
-        <p className="mb-6 text-sm leading-relaxed text-text-secondary">
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "1rem", // body-md from DESIGN.md
+            lineHeight: 1.65,
+            color: "var(--color-text-secondary)",
+            margin: "0 0 24px 0",
+          }}
+        >
           {description}
         </p>
 
         {/* Tech Badges */}
-        <div className="mb-6 flex flex-wrap gap-1.5">
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "6px",
+            marginBottom: "24px",
+          }}
+        >
           {tech.map((t, idx) => (
             <span
               key={idx}
-              className="bg-text-primary/5 px-2 py-0.5 font-mono text-[10px] tracking-wide text-text-secondary rounded-sm"
+              style={{
+                backgroundColor: "#f5f5f7",
+                color: "#6e6e73",
+                borderRadius: "var(--radius-full)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.7rem",
+                padding: "2px 10px",
+                letterSpacing: "0.02em",
+              }}
             >
               {t}
             </span>
@@ -77,32 +154,76 @@ export default function ProjectCard({ project }) {
 
       {/* Button Row */}
       {hasLinks && (
-        <div className="flex items-center gap-3 border-t border-text-primary/5 pt-4">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            borderTop: "1px solid var(--color-border-light)",
+            paddingTop: "16px",
+          }}
+        >
           {githubLink && (
             <a
               href={githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center font-mono text-xs font-bold uppercase tracking-wider text-text-primary hover:underline"
+              className="project-link"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: "var(--color-text-primary)",
+                textDecoration: "none",
+                transition: "color 200ms ease",
+              }}
             >
               GitHub Repo
             </a>
           )}
           {githubLink && liveLink && (
-            <span className="font-mono text-[10px] text-text-secondary/40">//</span>
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                color: "var(--color-text-secondary)",
+                opacity: 0.4,
+              }}
+            >
+              //
+            </span>
           )}
           {liveLink && (
             <a
               href={liveLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center font-mono text-xs font-bold uppercase tracking-wider text-text-primary hover:underline"
+              className="project-link"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: "var(--color-text-primary)",
+                textDecoration: "none",
+                transition: "color 200ms ease",
+              }}
             >
               Live Demo
             </a>
           )}
         </div>
       )}
+
+      {/* Scoped style for link hovers */}
+      <style>{`
+        .project-link:hover {
+          color: var(--color-accent) !important;
+        }
+      `}</style>
     </motion.div>
   );
 }
