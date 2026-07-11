@@ -2,62 +2,62 @@
 
 @theme {
   /* ─── Deep Studio: Color Tokens ─── */
-  --color-primary:          #0a0a0a;
-  --color-surface:          #ffffff;
-  --color-surface-alt:      #f5f5f7;
-  --color-text-on-dark:     #f5f5f7;
-  --color-text-primary:     #1d1d1f;
-  --color-text-secondary:   #6e6e73;
-  --color-accent:           #00b4d8;
-  --color-accent-hover:     #0096b8;
-  --color-border-light:     #e5e5e5;
-  --color-border-dark:      rgba(255, 255, 255, 0.10);
-  --color-tag-live-bg:      rgba(0, 180, 216, 0.10);
-  --color-tag-live-text:    #00b4d8;
-  --color-tag-dev-bg:       rgba(255, 200, 0, 0.10);
-  --color-tag-dev-text:     #9a7200;
-  --color-tag-planned-bg:   rgba(110, 110, 115, 0.10);
+  --color-primary: #0a0a0a;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f7;
+  --color-text-on-dark: #f5f5f7;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #6e6e73;
+  --color-accent: #00b4d8;
+  --color-accent-hover: #0096b8;
+  --color-border-light: #e5e5e5;
+  --color-border-dark: rgba(255, 255, 255, 0.10);
+  --color-tag-live-bg: rgba(0, 180, 216, 0.10);
+  --color-tag-live-text: #00b4d8;
+  --color-tag-dev-bg: rgba(255, 200, 0, 0.10);
+  --color-tag-dev-text: #9a7200;
+  --color-tag-planned-bg: rgba(110, 110, 115, 0.10);
   --color-tag-planned-text: #6e6e73;
 
   /* ─── Deep Studio: Typography ─── */
   --font-display: var(--font-space-grotesk), sans-serif;
-  --font-body:    var(--font-inter), sans-serif;
-  --font-mono:    var(--font-jetbrains-mono), monospace;
+  --font-body: var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
   /* Tailwind alias so font-sans resolves to Inter */
-  --font-sans:    var(--font-inter), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
 
   /* ─── Deep Studio: Spacing ─── */
-  --spacing-xs:  4px;
-  --spacing-sm:  8px;
-  --spacing-md:  16px;
-  --spacing-lg:  32px;
-  --spacing-xl:  64px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  --spacing-xl: 64px;
   --spacing-2xl: 128px;
 
   /* ─── Deep Studio: Border Radius ─── */
-  --radius-sm:   4px;
-  --radius-md:   8px;
-  --radius-lg:   16px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
   --radius-full: 9999px;
 }
 
 /* ─── Re-declare tokens as standard :root props for reliable inline-style resolution ─── */
 :root {
-  --color-primary:          #0a0a0a;
-  --color-surface:          #ffffff;
-  --color-surface-alt:      #f5f5f7;
-  --color-text-on-dark:     #f5f5f7;
-  --color-text-primary:     #1d1d1f;
-  --color-text-secondary:   #6e6e73;
-  --color-accent:           #00b4d8;
-  --color-accent-hover:     #0096b8;
-  --color-border-light:     #e5e5e5;
-  --color-border-dark:      rgba(255, 255, 255, 0.10);
-  --color-tag-live-bg:      rgba(0, 180, 216, 0.10);
-  --color-tag-live-text:    #00b4d8;
-  --color-tag-dev-bg:       rgba(255, 200, 0, 0.10);
-  --color-tag-dev-text:     #9a7200;
-  --color-tag-planned-bg:   rgba(110, 110, 115, 0.10);
+  --color-primary: #0a0a0a;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f7;
+  --color-text-on-dark: #f5f5f7;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #6e6e73;
+  --color-accent: #00b4d8;
+  --color-accent-hover: #0096b8;
+  --color-border-light: #e5e5e5;
+  --color-border-dark: rgba(255, 255, 255, 0.10);
+  --color-tag-live-bg: rgba(0, 180, 216, 0.10);
+  --color-tag-live-text: #00b4d8;
+  --color-tag-dev-bg: rgba(255, 200, 0, 0.10);
+  --color-tag-dev-text: #9a7200;
+  --color-tag-planned-bg: rgba(110, 110, 115, 0.10);
   --color-tag-planned-text: #6e6e73;
 }
 

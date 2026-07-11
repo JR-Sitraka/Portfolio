@@ -1,7 +1,8 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 
 export default function ProjectCard({ project }) {
-  const { title, category, status, tech, description, liveLink, githubLink } = project;
+  const { title, category, status, tech, description, liveLink, githubLink, iconUrl } = project;
   const shouldReduceMotion = useReducedMotion();
 
   // Get inline style colors for status badges per DESIGN.md
@@ -27,6 +28,8 @@ export default function ProjectCard({ project }) {
   };
 
   const hasLinks = liveLink !== null || githubLink !== null;
+  const [expanded, setExpanded] = useState(false);
+  const DESCRIPTION_THRESHOLD = 120;
 
   return (
     <motion.div
@@ -45,6 +48,8 @@ export default function ProjectCard({ project }) {
       transition={{
         ease: [0.25, 0.1, 0.25, 1],
         duration: shouldReduceMotion ? 0 : 0.3,
+        maxHeight: { duration: shouldReduceMotion ? 0 : 0.3 },
+        overflow: { duration: shouldReduceMotion ? 0 : 0.3 },
       }}
       style={{
         display: "flex",
@@ -54,10 +59,37 @@ export default function ProjectCard({ project }) {
         border: "1px solid var(--color-border-light)",
         borderRadius: "var(--radius-md)",
         padding: "28px",
-        transition: "background-color 300ms ease, box-shadow 300ms ease, transform 300ms ease",
+        maxWidth: "360px",
+        maxHeight: expanded ? "none" : "400px",
+        overflow: expanded ? "visible" : "hidden",
       }}
     >
-      <div>
+      {iconUrl && (
+  <div
+    style={{
+      width: "100%",
+      height: "28px",
+      background: "var(--color-surface-alt)",
+      borderRadius: "var(--radius-md) var(--radius-md) 0 0",
+      overflow: "hidden",
+      margin: "-28px -28px 16px -28px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    <img
+      src={iconUrl}
+      alt="Project icon"
+        style={{
+          maxHeight: "6px",
+          maxWidth: "6px",
+          objectFit: "contain",
+        }}
+    />
+  </div>
+)}
+<div>
         {/* Metadata Row */}
         <div
           style={{
@@ -68,7 +100,7 @@ export default function ProjectCard({ project }) {
             fontSize: "0.7rem",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
-            marginBottom: "16px",
+            marginBottom: "12px",
           }}
         >
           <span style={{ color: "var(--color-text-secondary)" }}>{category}</span>
@@ -96,7 +128,7 @@ export default function ProjectCard({ project }) {
             color: "var(--color-text-primary)",
             textTransform: "uppercase",
             letterSpacing: "-0.01em",
-            margin: "0 0 12px 0",
+            margin: "0 0 8px 0",
           }}
         >
           {title}
@@ -107,7 +139,7 @@ export default function ProjectCard({ project }) {
           style={{
             border: 0,
             borderTop: "1px solid var(--color-border-light)",
-            margin: "0 0 16px 0",
+            margin: "0 0 12px 0",
           }}
         />
 
@@ -118,11 +150,36 @@ export default function ProjectCard({ project }) {
             fontSize: "1rem", // body-md from DESIGN.md
             lineHeight: 1.65,
             color: "var(--color-text-secondary)",
-            margin: "0 0 24px 0",
+            margin: "0 0 8px 0",
           }}
         >
-          {description}
+          {description.length > DESCRIPTION_THRESHOLD
+            ? expanded
+              ? description
+              : description.substring(0, DESCRIPTION_THRESHOLD) + "..."
+            : description}
         </p>
+
+        {/* Toggle Button */}
+        {description.length > DESCRIPTION_THRESHOLD && (
+          <button
+            onClick={() => setExpanded(!expanded)}
+            style={{
+              background: "none",
+              border: "none",
+              textDecoration: "none",
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.7rem",
+              color: "var(--color-accent)",
+              cursor: "pointer",
+              padding: 0,
+              marginTop: "4px",
+              textAlign: "left",
+            }}
+          >
+            {expanded ? "View less" : "View more"}
+          </button>
+        )}
 
         {/* Tech Badges */}
         <div
@@ -130,7 +187,7 @@ export default function ProjectCard({ project }) {
             display: "flex",
             flexWrap: "wrap",
             gap: "6px",
-            marginBottom: "24px",
+            marginBottom: "14px",
           }}
         >
           {tech.map((t, idx) => (
@@ -160,7 +217,7 @@ export default function ProjectCard({ project }) {
             alignItems: "center",
             gap: "12px",
             borderTop: "1px solid var(--color-border-light)",
-            paddingTop: "16px",
+            paddingTop: "14px",
           }}
         >
           {githubLink && (

@@ -26,7 +26,8 @@ export const portfolioData = {
       tech: ["Next.js", "React Native", "Vercel"],
       description: "A minimalist educational tool designed for non-native English speakers to rapidly learn, recognize, and translate numbers in English. Deployed as a web app on Vercel with an active mobile repository built using React Native.",
       liveLink: "https://numera-v2.vercel.app/",
-      githubLink: "https://github.com/JR-Sitraka/Numera-V2"
+      githubLink: "https://github.com/JR-Sitraka/Numera-V2",
+      iconUrl: "/icons/Numera.png"
     },
     {
       id: "project-2",
@@ -36,7 +37,8 @@ export const portfolioData = {
       tech: ["Python", "NumPy", "Flask"],
       description: "[Modular Placeholder] A secondary codebase structure optimized for numerical computing operations and modular data arrays. Prepared for scaling into future LLM and vector indexing frameworks.",
       liveLink: null,
-      githubLink: null
+      githubLink: null,
+      iconUrl: "/icons/N2.png"
     },
     {
       id: "project-3",
@@ -46,7 +48,8 @@ export const portfolioData = {
       tech: ["Python", "Streamlit"],
       description: "[Modular Placeholder] Engineered component layout reserved for an upcoming deployment of customized Retrieval-Augmented Generation (RAG) datasets or autonomous agent tools.",
       liveLink: null,
-      githubLink: null
+      githubLink: null,
+      iconUrl: "/icons/N1.png"
     }
   ],
 
