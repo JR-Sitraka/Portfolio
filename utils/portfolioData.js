@@ -23,7 +23,7 @@ export const portfolioData = {
       title: "Numera // Numbers in English",
       category: "Educational Application",
       status: "Live",
-      tech: ["Next.js", "React Native", "Vercel"],
+      tech: ["Next.js", "Vercel"],
       description: "A minimalist educational tool designed for non-native English speakers to rapidly learn, recognize, and translate numbers in English. Deployed as a web app on Vercel with an active mobile repository built using React Native.",
       liveLink: "https://numera-v2.vercel.app/",
       githubLink: "https://github.com/JR-Sitraka/Numera-V2",

@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Deep Studio: Color Tokens ─── */
-  --color-primary: #0a0a0a;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f5f5f7;
-  --color-text-on-dark: #f5f5f7;
-  --color-text-primary: #1d1d1f;
+  /* ─── Deep Studio: Color Tokens (v3) ─── */
+  --color-primary: #2C4A3B;
+  --color-surface: #F5F1E8;
+  --color-surface-alt: #F0EBD8;
+  --color-text-on-dark: #F5F1E8;
+  --color-text-primary: #1A1A1A;
   --color-text-secondary: #6e6e73;
-  --color-accent: #00b4d8;
-  --color-accent-hover: #0096b8;
-  --color-border-light: #e5e5e5;
-  --color-border-dark: rgba(255, 255, 255, 0.10);
-  --color-tag-live-bg: rgba(0, 180, 216, 0.10);
-  --color-tag-live-text: #00b4d8;
+  --color-accent: #3F7A5C;
+  --color-accent-hover: #357456;
+  --color-border-light: rgba(44, 74, 59, 0.35);
+  --color-border-dark: rgba(245, 241, 232, 0.20);
+  --color-tag-live-bg: rgba(63, 122, 92, 0.10);
+  --color-tag-live-text: #3F7A5C;
   --color-tag-dev-bg: rgba(255, 200, 0, 0.10);
   --color-tag-dev-text: #9a7200;
   --color-tag-planned-bg: rgba(110, 110, 115, 0.10);
@@ -23,7 +23,6 @@
   --font-display: var(--font-space-grotesk), sans-serif;
   --font-body: var(--font-inter), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
-  /* Tailwind alias so font-sans resolves to Inter */
   --font-sans: var(--font-inter), sans-serif;
 
   /* ─── Deep Studio: Spacing ─── */
@@ -41,20 +40,19 @@
   --radius-full: 9999px;
 }
 
-/* ─── Re-declare tokens as standard :root props for reliable inline-style resolution ─── */
 :root {
-  --color-primary: #0a0a0a;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f5f5f7;
-  --color-text-on-dark: #f5f5f7;
-  --color-text-primary: #1d1d1f;
+  --color-primary: #2C4A3B;
+  --color-surface: #F5F1E8;
+  --color-surface-alt: #F0EBD8;
+  --color-text-on-dark: #F5F1E8;
+  --color-text-primary: #1A1A1A;
   --color-text-secondary: #6e6e73;
-  --color-accent: #00b4d8;
-  --color-accent-hover: #0096b8;
-  --color-border-light: #e5e5e5;
-  --color-border-dark: rgba(255, 255, 255, 0.10);
-  --color-tag-live-bg: rgba(0, 180, 216, 0.10);
-  --color-tag-live-text: #00b4d8;
+  --color-accent: #3F7A5C;
+  --color-accent-hover: #357456;
+  --color-border-light: rgba(44, 74, 59, 0.35);
+  --color-border-dark: rgba(245, 241, 232, 0.20);
+  --color-tag-live-bg: rgba(63, 122, 92, 0.10);
+  --color-tag-live-text: #3F7A5C;
   --color-tag-dev-bg: rgba(255, 200, 0, 0.10);
   --color-tag-dev-text: #9a7200;
   --color-tag-planned-bg: rgba(110, 110, 115, 0.10);
@@ -71,18 +69,31 @@ body {
 }
 
 /* ══════════════════════════════════════════════════
-   Hero — Profile image parallelogram (Deep Studio)
-   Defined here to guarantee PostCSS cascade order.
-   Do NOT move back into component <style> tags.
+   Hero — Profile image rounded-square (Deep Studio)
    ══════════════════════════════════════════════════ */
 
-.profile-image-wrapper {
-  aspect-ratio: 2 / 3;
+.profile-image-container {
+  position: relative;
+  aspect-ratio: 4 / 5;
   width: 100%;
   max-width: 380px;
-  clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+}
+
+.profile-image-frame {
+  position: absolute;
+  left: calc(var(--spacing) * -4);
+  top: calc(var(--spacing) * -4);
+  right: calc(var(--spacing) * 4);
+  bottom: calc(var(--spacing) * 4);
+  border: 2px solid var(--color-accent);
+  border-radius: 24px;
+}
+
+.profile-image-wrapper {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  position: relative;
+  border-radius: 24px;
 }
 
 .profile-image-wrapper img {
@@ -90,29 +101,48 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transform: scaleX(1.12);
   display: block;
 }
 
-/* Mobile: revert to plain rectangle */
+/* Social icon buttons */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-on-dark);
+  border-radius: var(--radius-full);
+  transition: background-color 200ms ease;
+}
+
+.social-icon:hover {
+  background-color: rgba(245, 241, 232, 0.10);
+}
+
 @media (max-width: 767px) {
-  .profile-image-wrapper {
-    clip-path: none;
-    border-radius: 4px;
-    aspect-ratio: 3 / 4;
+  .profile-image-container {
     max-width: 300px;
     margin: 0 auto;
   }
 
-  .profile-image-wrapper img {
-    transform: none;
+  .profile-image-frame {
+    left: -12px;
+    top: -12px;
+    right: -12px;
+    bottom: -12px;
+    border-radius: 20px;
+  }
+
+  .profile-image-wrapper {
+    border-radius: 20px;
   }
 }
 
 /* ─── Hero grid responsive ─── */
 .hero-grid {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
 }
 
 @media (max-width: 767px) {
@@ -145,13 +175,26 @@ body {
   }
 }
 
+/* ─── Project detail page grid ─── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* ─── Button hover states ─── */
 .btn-primary:hover {
   background-color: var(--color-accent-hover) !important;
 }
 
 .btn-outline:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: rgba(245, 241, 232, 0.10) !important;
 }
 
 /* ─── Nav link hover ─── */

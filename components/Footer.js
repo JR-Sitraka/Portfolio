@@ -7,10 +7,10 @@ export default function Footer() {
     <footer
       id="contact"
       style={{
-        backgroundColor: "#0a0a0a",
-        color: "#6e6e73",
+        backgroundColor: "var(--color-surface)",
+        color: "var(--color-text-primary)",
         padding: "64px 24px",
-        borderTop: "1px solid var(--color-border-dark)",
+        borderTop: "1px solid var(--color-border-light)",
       }}
     >
       <div
@@ -39,12 +39,12 @@ export default function Footer() {
               href={`mailto:${profile.email}`}
               className="footer-link"
               style={{
-                fontFamily: "var(--font-mono)",
+                 fontFamily: "var(--font-mono)",
                 fontSize: "0.75rem",
                 fontWeight: 500,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "#f5f5f7",
+                color: "var(--color-text-primary)",
                 textDecoration: "none",
                 transition: "color 200ms ease",
               }}
@@ -64,7 +64,7 @@ export default function Footer() {
                 fontWeight: 500,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "#f5f5f7",
+                color: "var(--color-text-primary)",
                 textDecoration: "none",
                 transition: "color 200ms ease",
               }}
@@ -84,7 +84,7 @@ export default function Footer() {
                 fontWeight: 500,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "#f5f5f7",
+                color: "var(--color-text-primary)",
                 textDecoration: "none",
                 transition: "color 200ms ease",
               }}
@@ -99,7 +99,7 @@ export default function Footer() {
           style={{
             height: "1px",
             width: "32px",
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backgroundColor: "var(--color-border-light)",
           }}
         />
 
@@ -110,11 +110,13 @@ export default function Footer() {
             fontSize: "0.75rem",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
-            color: "#6e6e73",
+            color: "var(--color-text-primary)",
             margin: 0,
           }}
-        >
-          {profile.initials} // © 2026. Built for Scale.
+          >
+          <span>
+            {profile.initials}
+          </span> — © 2026. Built for Scale.
         </p>
       </div>
 

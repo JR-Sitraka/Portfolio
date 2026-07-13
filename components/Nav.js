@@ -1,5 +1,6 @@
 "use client";
 import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 import { portfolioData } from "@/utils/portfolioData";
 
 export default function Nav() {
@@ -19,28 +20,29 @@ export default function Nav() {
     >
       <div
         style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 64px",
+          padding: "0 40px",
           height: "60px",
         }}
         className="nav-inner"
       >
         {/* Brand */}
-        <div
+        <Link
+          href="/"
+          className="nav-brand"
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: "0.8125rem",
-            fontWeight: 500,
-            letterSpacing: "0.04em",
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            letterSpacing: "0.16em",
             color: "var(--color-text-on-dark)",
+            textDecoration: "none",
           }}
         >
           Lab.01 // {profile.initials}
-        </div>
+        </Link>
 
         {/* Nav links */}
         <ul
@@ -111,6 +113,16 @@ export default function Nav() {
         </div>
       </div>
 
+      <style>{`
+        .nav-brand:hover {
+          color: var(--color-accent);
+        }
+        @media (min-width: 768px) {
+          .nav-brand {
+            font-size: 0.875rem;
+          }
+        }
+      `}</style>
     </nav>
   );
 }

@@ -1,277 +1,135 @@
 ---
 name: Deep Studio
-description: >
-  Premium dark-to-light design system for a student engineer portfolio.
-  High-contrast dark hero, pure white body sections, single electric teal accent.
-  Modern and elegant — no gradients, no decorative noise, no video backgrounds.
-version: alpha
-
-colors:
-  primary:          "#0a0a0a"
-  surface:          "#ffffff"
-  surface-alt:      "#f5f5f7"
-  text-on-dark:     "#f5f5f7"
-  text-primary:     "#1d1d1f"
-  text-secondary:   "#6e6e73"
-  accent:           "#00b4d8"
-  accent-hover:     "#0096b8"
-  border-light:     "#e5e5e5"
-  border-dark:      "rgba(255, 255, 255, 0.10)"
-  tag-live-bg:      "rgba(0, 180, 216, 0.10)"
-  tag-live-text:    "#00b4d8"
-  tag-dev-bg:       "rgba(255, 200, 0, 0.10)"
-  tag-dev-text:     "#9a7200"
-  tag-planned-bg:   "rgba(110, 110, 115, 0.10)"
-  tag-planned-text: "#6e6e73"
-
-typography:
-  display:
-    fontFamily:    Space Grotesk
-    fontSize:      4.5rem
-    fontWeight:    700
-    letterSpacing: -0.03em
-    lineHeight:    1.0
-  h2:
-    fontFamily:    Space Grotesk
-    fontSize:      2rem
-    fontWeight:    600
-    letterSpacing: -0.02em
-    lineHeight:    1.2
-  h3:
-    fontFamily:    Space Grotesk
-    fontSize:      1.25rem
-    fontWeight:    600
-    lineHeight:    1.3
-  body-lg:
-    fontFamily:  Inter
-    fontSize:    1.125rem
-    lineHeight:  1.75
-  body-md:
-    fontFamily:  Inter
-    fontSize:    1rem
-    lineHeight:  1.65
-  label-mono:
-    fontFamily:    JetBrains Mono
-    fontSize:      0.75rem
-    fontWeight:    500
-    letterSpacing: 0.08em
-
-rounded:
-  sm:   4px
-  md:   8px
-  lg:   16px
-  full: 9999px
-
-spacing:
-  xs:  4px
-  sm:  8px
-  md:  16px
-  lg:  32px
-  xl:  64px
-  2xl: 128px
-
-components:
-  button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor:       "{colors.primary}"
-    rounded:         "{rounded.sm}"
-    padding:         "12px 28px"
-  button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
-
-  button-outline:
-    backgroundColor: "transparent"
-    textColor:       "{colors.text-on-dark}"
-    rounded:         "{rounded.sm}"
-    padding:         "12px 28px"
-  button-outline-hover:
-    backgroundColor: "rgba(255, 255, 255, 0.08)"
-
-  nav:
-    backgroundColor: "{colors.primary}"
-    textColor:       "{colors.text-on-dark}"
-
-  hero-section:
-    backgroundColor: "{colors.primary}"
-    textColor:       "{colors.text-on-dark}"
-
-  body-section:
-    backgroundColor: "{colors.surface}"
-    textColor:       "{colors.text-primary}"
-
-  project-card:
-    backgroundColor: "{colors.surface}"
-    textColor:       "{colors.text-primary}"
-    rounded:         "{rounded.md}"
-    padding:         "28px"
-  project-card-hover:
-    backgroundColor: "{colors.surface-alt}"
-
-  tech-card:
-    backgroundColor: "{colors.surface-alt}"
-    textColor:       "{colors.text-secondary}"
-    rounded:         "{rounded.md}"
-    padding:         "20px"
-  tech-card-hover:
-    textColor: "{colors.accent}"
-
-  status-live:
-    backgroundColor: "{colors.tag-live-bg}"
-    textColor:       "{colors.tag-live-text}"
-    rounded:         "{rounded.full}"
-    padding:         "2px 10px"
-  status-dev:
-    backgroundColor: "{colors.tag-dev-bg}"
-    textColor:       "{colors.tag-dev-text}"
-    rounded:         "{rounded.full}"
-    padding:         "2px 10px"
-  status-planned:
-    backgroundColor: "{colors.tag-planned-bg}"
-    textColor:       "{colors.tag-planned-text}"
-    rounded:         "{rounded.full}"
-    padding:         "2px 10px"
-
-  profile-image-container:
-    width:    "100%"
-    height:   "520px"
-    rounded:  "0px"
+description: Warm, forest-green-on-cream design system for a student engineer portfolio. Dark forest-green hero, cream body sections, minimal information-dense-on-demand cards. Modern and elegant — no gradients, no decorative noise, no video backgrounds.
+version: alpha (v3 — color + hero + card revision, see Revision Log)
 ---
 
 ## Overview
 
 Deep Studio is built on a single structural idea: **one dramatic dark moment, then clarity**.
 
-The navigation and hero live on a near-black surface (`#0a0a0a`). Everything below that — projects, stack, logs, footer — lives on pure white. The transition between them is the page's only dramatic move. Everything else earns its place through contrast ratios, spatial precision, and restraint.
+The navigation and hero live on a deep forest-green surface. Everything below that — projects, stack, logs, footer — lives on a warm cream surface. The transition between them is the page's only dramatic move. Everything else earns its place through contrast ratios, spatial precision, and restraint.
 
-The sole accent color is electric teal (`#00b4d8`). It appears exclusively on interactive and status elements: CTA buttons, hover states on tech icons, and the "Live Deployment" status badge. It should never fill a large surface or appear as a section background.
+This version replaces v1's near-black/teal system entirely (not extends it, as the intermediate navy revision did — that revision was tested and discarded before shipping). The forest green now serves the role the near-black and navy previously did.
 
 This is not a dark-mode portfolio. It is a portfolio with one dark section. That distinction matters for implementation.
 
 ## Colors
 
-The palette is organized into three zones:
+WARNING: Values below are visual estimates from reference screenshots, not color-picked from a source file. Treat as a working draft — a proper eyedropper pass before calling this final is worth doing, not optional polish.
 
 **Dark zone — hero and navigation only:**
-- Background: `#0a0a0a` (near-black, not pure black — avoids harshness under bright monitors)
-- Text: `#f5f5f7` (warm off-white, not pure white)
-- Borders: `rgba(255, 255, 255, 0.10)` — ultra-subtle, barely-there dividers
-- Secondary text: `#6e6e73` — muted labels, nav items
+- Background: `#2C4A3B` (deep forest green)
+- Text: cream/off-white, `#F5F1E8`
+- Structural elements (borders, icon strokes, decorative frames): `#2C4A3B` outline against the cream zone, or a lighter tint against itself
 
 **Light zone — all sections below the hero:**
-- Background: `#ffffff` primary
-- Alternate surface: `#f5f5f7` for tech cards, timeline rows, alternating rows
-- Text: `#1d1d1f` primary, `#6e6e73` secondary
-- Borders: `#e5e5e5` at 1px — never heavier
+- Background: `#F5F1E8` (warm cream, not white, not blue-tinted — this supersedes both v1's white and the discarded v2 blue-tint)
+- Text: near-black charcoal, `#1A1A1A` (not pure black)
+- Card/component borders: thin `#2C4A3B` outline — structural, not decorative
+- Card background: same cream as page background, or a very slightly distinct tint — confirm visually once color-picked values are in, since screenshots suggested these may currently read as too similar (see Known Gaps)
 
-**Accent — interaction only:**
-- `#00b4d8` on hover states, active elements, live-status tags, CTA buttons
-- `#0096b8` on button hover/pressed states
-- Never use accent as a background for any section or large container
+**Accent — interaction and highlights only:**
+- A lighter, more teal-leaning green, approximately `#3F7A5C`, used for: hover states, the highlighted phrase within hero subtext ("AI engineering"), link text ("VIEW PROJECT →")
+- Never used as a large background fill
 
-Status badge palette is intentionally desaturated — the colors are hints, not announcements.
+**Status system (provisional — not yet used on the current card design, reserved for the future project-detail page):**
+- Kept deliberately off the single-hue system for the same reason as v2: status indicators need to be quickly distinguishable at a glance. Exact values to be defined when the detail page itself is designed.
 
 ## Typography
 
-Two fonts, three roles. Load via `next/font/google`.
+Unchanged in family/role assignments from v1/v2. Two fonts, three roles. Load via `next/font/google`.
+- **Space Grotesk** — display headlines, card titles. Heavy weight, tight negative tracking.
+- **Inter** — all body copy, paragraphs, nav labels.
+- **JetBrains Mono** — section numbers (`01 //`), status labels, category tags, decorative small-caps text (e.g. "FOLLOW ME:"). Never used for body copy.
 
-- **Space Grotesk** — display headlines and section titles only. Heavy weight, tight negative tracking. The personality of the page.
-- **Inter** — all body copy, paragraphs, card descriptions, nav labels. Neutral and disappears into the content.
-- **JetBrains Mono** — section numbers (`01 //`), dates in the lab log, status labels, category tags. Signals technical precision. Never used for body copy.
+Rules unchanged: never mix Space Grotesk and JetBrains Mono in the same text element; section headers follow `[monospace number] // [CAPS TITLE IN MONO]`; all text left-aligned except the footer cluster.
 
-Rules:
-- Never mix Space Grotesk and JetBrains Mono in the same text element
-- Display headline (`STUDENT ENGINEER`) uses `font-size: 4.5rem`, `font-weight: 700`, `letter-spacing: -0.03em`
-- Section headers follow the exact pattern: `[monospace number] // [CAPS TITLE IN MONO]`
-- All text is left-aligned. Nothing is centered except the footer cluster.
+## Hero Section (revised this version)
 
-## Layout
+- **Image shape: rounded-square, NOT the v1/v2 parallelogram.** This is a deliberate, confirmed departure — see Revision Log for why. Do not reintroduce the clip-path parallelogram without an explicit decision to revert.
+- **Layered frame decoration:** an open-bracket outline shape (`#2C4A3B`), offset behind the image, visible peeking out from two corners — adapted from an external reference, restyled into this system's colors and restraint level (no added colors, no extra decoration beyond the single bracket outline).
+- **Intro line accent:** a short dash/rule mark next to "Hello there, I'm [name]," in the muted secondary color.
+- **Subtext highlight:** exactly one phrase within the hero's descriptive subtext rendered in the accent color (`#3F7A5C`) — currently "AI engineering." Do not highlight additional phrases; the restraint is the point.
+- **Social row:** a small "FOLLOW ME:" label (JetBrains Mono, small, uppercase) with outline-style icon links (GitHub, LinkedIn) — positioned below the two existing CTA buttons, not replacing them.
+- **Existing elements unchanged:** headline copy, subtext copy (aside from the one highlighted phrase), both CTA buttons, two-column layout.
 
-Single-page vertical scroll. Max content width `1200px`, centered with `64px` horizontal padding on desktop, `24px` on mobile.
+## Project Cards (revised this version — fully minimal)
 
-**Hero layout:** Asymmetric two-column grid on desktop — text left at 55%, profile image right at 45%. On mobile, text above, image below.
+Deliberately stripped down from v1/v2's information-dense version:
+- **Contents, in order:** a small line-art icon (not a logo, not a screenshot — this is what structurally prevents the image-sizing bug found in the previous icon system), the project title, and — **only for real/live projects** — a `VIEW PROJECT →` text link at the bottom.
+- **Removed entirely from the card face:** description text, tech tag pills, status badges. This information is not deleted from the product — it's intended to live on the future per-project detail page (see Revision Log), not lost.
+- **Placeholder/not-yet-real projects:** icon and title only, no link — this is the honest fix for the `[Modular Placeholder]` text bug found during the original audit. There's no body text left to accidentally ship unfinished.
+- Card style: cream background, thin `#2C4A3B` border, rounded corners. Equal-width grid, unchanged from the original layout.
 
-**Sections below hero:** Full-width white background. Internal content constrained to max-width. Generous vertical padding (`96px` top/bottom on desktop, `64px` on mobile).
+## Project Detail Page (in progress — not yet built)
 
-## Elevation & Depth
+Structure and framing follow the reference closely, per explicit decision — only one section's *content* is redefined, not its position. Nothing else in this page's layout should be reinterpreted freely.
 
-No shadows on dark surfaces. On light surfaces:
+### Page structure
+1. **Main block** (large, primary position) — Numera web: title, description (deferred), tech tags, "Live" badge, demo media (deferred).
+2. **Related block** (smaller, adjacent position, same placement as the reference's secondary project cards) — Numera Mobile: title, tech tag (React Native), noted as a separate repository from the web version.
+3. **Access & Status block** (same frame and position as the reference's "Active Deployments" — content redefined, see below).
+4. **Project Notes block** (same position as the reference's "Project Lab Notes") — the two reused log entries.
 
-- **Project cards at rest:** no shadow
-- **Project cards on hover:** `box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08)` + `transform: translateY(-4px)`
-- **Transition:** `300ms ease` on all hover properties
+### Access & Status (replaces "Active Deployments" — confirmed decision)
+The reference's version was a multi-project uptime dashboard, which doesn't fit inside a single project's own page — and its green "online" dots would misrepresent a downloadable APK as a running live service, which it isn't. This section instead states plainly how to actually access each version:
 
-Do not add shadows to nav, tech cards, or the footer.
+- **Web** — status dot: teal/"Live" color (reuses the existing Live tag color, since this genuinely is a live, running service). Primary link: Live Demo. Secondary link: GitHub Repo.
+- **Mobile** — status dot: amber/neutral (reuses the existing "In Development"-style tag color, deliberately *not* the live-green — a downloadable APK is not an online service). Label: "Downloadable (APK via GitHub)." Link: GitHub Repo.
 
-## Shapes
+No "What's Next" section — considered, explicitly declined.
 
-**Profile image container — the signature element:**
+**Numera (web) block:**
+- Existing title, tech tags (Next.js, Vercel), "Live" badge, GitHub + Live Demo links — already known, reused as-is.
+- Description: deferred (see below).
 
-The image container uses a CSS `clip-path` to create a tall vertical parallelogram leaning to the right. The image itself is not rotated — only the clip boundary is shaped. This creates an angled, editorial frame that feels architectural without being decorative.
+**Numera Mobile (related) block:**
+- A separate GitHub repository — NOT the same codebase as the web version.
+- Distribution: downloadable APK from that repo, surfaced via the Access & Status block above with an accurate (non-"Live") label.
+- Tech: React Native.
+- GitHub URL: not yet provided. **Blocking** — this block can't be built until it's supplied.
 
-```css
-.profile-image-wrapper {
-  aspect-ratio: 2 / 3;
-  width: 100%;
-  max-width: 380px;
-  clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
-  overflow: hidden;
-  position: relative;
-}
+**Project notes (reused, not invented):**
+Two existing homepage chronological-log entries are Numera-specific and will be surfaced here too (staying on the homepage log as well — not removed from there):
+- "Migrated Numera core application components to a responsive React Native environment."
+- "Successfully engineered and deployed Numera web prototype to Vercel."
 
-.profile-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  transform: scaleX(1.12); /* compensates for the clip crop on both sides */
-}
-```
+**Deliberately deferred, not forgotten:**
+- **Final wording** for the Numera description and any other copy on this page. Held on purpose until other technical modifications to this page settle, since content may change as those land — do not write speculative copy in the meantime.
+- **Demo media** — a muted, looping video (not a literal `.gif` file — same visual effect, far smaller) showing the real app in use, to be provided later via screen recording. Must respect `prefers-reduced-motion`, per this system's existing Framer Motion principle.
 
-Do not apply `border-radius` to this container. The parallelogram shape is the border treatment.
+**Note on scope:** Numera itself (the actual project) is separate work, only touched after the portfolio is finished. This page is being built as a *template/foundation* — structure and framing locked in now, real data (wording, recording, mobile URL) dropped in later without needing to rebuild the page itself.
 
-On mobile (below `768px`), switch to a standard rectangle:
-```css
-clip-path: none;
-aspect-ratio: 3 / 4;
-border-radius: 4px;
-```
+**Still needed before this page is fully populated:**
+1. Numera Mobile's GitHub repo URL.
+2. Final wording (deferred by choice).
+3. Demo recording (deferred by choice).
 
-## Components
+## Layout, Elevation, Components (unchanged from v1/v2)
 
-**Tech cards (`<TechCard />`):**
-- Display the tech icon (from `react-icons/si` — Simple Icons) at rest, centered in the card
-- Icon size: `32px`
-- At rest: icon renders in `#6e6e73` (muted gray)
-- On hover: icon transitions to the tech's official brand color (see Simple Icons hex reference), card background shifts to `#f5f5f7`
-- If a tech has no clear brand color (e.g., CSS), default hover color to `#00b4d8`
-- The tech name renders below the icon in `JetBrains Mono`, `0.7rem`, also muted at rest
-- Transition: `200ms ease` on color and background
-
-**Project cards (`<ProjectCard />`):**
-- Top row: category label (JetBrains Mono, caps) + status badge (colored pill)
-- Title in Space Grotesk h3
-- Thin `1px` horizontal rule (`#e5e5e5`) below the title
-- Description in Inter body-md, secondary text color
-- Tech tag pills at the bottom: `#f5f5f7` background, `#6e6e73` text, `border-radius: 9999px`, `padding: 2px 10px`
-- GitHub and Live buttons appear only when the respective link is not `null`
-
-**Lab log timeline:**
-- Thin `1px` vertical line in `#e5e5e5` running along the left edge
-- Date on the left in JetBrains Mono, `#00b4d8` color
-- Event text on the right in Inter body-md
-- Each entry stagger-reveals on scroll using Framer Motion
+Max content width `1200px`, `64px`/`24px` padding desktop/mobile. Shadow only on light-surface hover states (`0 8px 30px rgba(0,0,0,0.08)`), never on dark surfaces. Tech cards and lab-log timeline unchanged in structure — only their color tokens shift to this version's palette (border `#2C4A3B` at low opacity in place of the previous neutral or navy-tinted hairline).
 
 ## Do's and Don'ts
 
-- ✅ Keep `#0a0a0a` strictly to the nav and hero — nowhere else
-- ✅ Use `#00b4d8` only on interactive signals and the "Live" status badge
-- ✅ Use `react-icons/si` for all tech stack icons, colored on hover
-- ✅ Apply the parallelogram `clip-path` to the profile image container
-- ✅ Left-align all body content and section headers
-- ✅ Respect `prefers-reduced-motion` via Framer Motion's `useReducedMotion()` hook
-- ❌ Never add gradients, glows, blurs, or backdrop filters anywhere
-- ❌ Never use more than one accent color
-- ❌ Never center-align section headers
-- ❌ Never add `box-shadow` to components on dark surfaces
-- ❌ Never apply `border-radius` to the profile image parallelogram container
-- ❌ Never use `clip-path` on mobile — revert to a standard rectangle with `border-radius: 4px`
+- Keep `#2C4A3B` as the only dark-zone background — hero and nav only
+- Use the accent green only on hover/interactive/highlighted-phrase elements
+- Use simple line-art icons for project cards — never logos or screenshots, structurally avoids the prior sizing bug
+- Keep the rounded-square image shape — the parallelogram is retired, not toggled per-page
+- Never add gradients, glows, blurs, or backdrop filters
+- Never show description text or tech tags directly on a project card face
+- Never ship placeholder/lorem-style text to production — an icon-and-title-only card with no link is the correct empty state, not a card with placeholder body copy
+
+## Known implementation gaps (as of this revision)
+
+- The `01 //` numbering prefix is missing from the "SELECTED EXPERIMENTS" header in the current build — every other section on the page has one, this one doesn't yet. Small, cheap fix, deliberately deferred rather than spent this round.
+- Card background vs. page background may currently be too visually similar — worth a real check once exact colors are picked (see the warning under Colors).
+- The project-detail page (expand -> demo + related + status + notes) is scoped and agreed on, but not yet designed. Description text, tech tags, and status info removed from the card face are not implemented anywhere yet — this is real, temporarily-missing functionality, not just a card simplification.
+
+## Revision Log
+
+**v3 (this revision):** Full color system replaced — forest green/cream, not an extension of v1's teal accent (unlike the v2 navy attempt, which kept `#00b4d8` as a preserved thread; this version's palette wasn't chosen to extend v1, it was chosen fresh). Hero gained a layered frame decoration, dash accent, one highlighted subtext phrase, and a social-links row. Profile image shape deliberately changed from the v1/v2 parallelogram to a rounded square — this was an explicit, confirmed trade-off, not an oversight; the parallelogram is retired. Project cards stripped from information-dense to fully minimal — description/tags/status moved conceptually to a not-yet-built detail page, not deleted from the product.
+
+**v2 (tested, discarded before shipping):** A navy-to-pale-blue tonal ramp extending v1's teal accent. Mocked in v0, rejected on sight before any code shipped — kept here only as a record that it was considered, not as history worth reviving.
+
+**v1:** Original near-black/white/teal system with the parallelogram signature image shape (see git history for the original file).

@@ -44,7 +44,7 @@ export default function Home() {
             id="projects"
             style={{ borderTop: "1px solid var(--color-border-light)" }}
           >
-            <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "96px 64px" }} className="section-inner">
+            <div style={{ padding: "96px 40px" }} className="section-inner">
               <h2
                 style={{
                   fontFamily: "var(--font-mono)",
@@ -60,9 +60,9 @@ export default function Home() {
                 {" "}
                 <span style={{ color: "var(--color-text-primary)" }}>// SELECTED EXPERIMENTS</span>
               </h2>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {projects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
+              <div className="projects-grid">
+                {projects.map((project, index) => (
+                  <ProjectCard key={project.id} project={project} featured={index === 0} />
                 ))}
               </div>
             </div>
@@ -73,7 +73,7 @@ export default function Home() {
             id="stack"
             style={{ borderTop: "1px solid var(--color-border-light)" }}
           >
-            <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "96px 64px" }} className="section-inner">
+            <div style={{ padding: "96px 40px" }} className="section-inner">
               <h2
                 style={{
                   fontFamily: "var(--font-mono)",
