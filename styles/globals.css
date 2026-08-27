@@ -1,203 +1,802 @@
-@import "tailwindcss";
+/* ============================================================
+   Graphite & ember — global stylesheet.
+   Ported from portfolio-reference-build.html (accepted Phase 1
+   visual baseline, revision 10.1). This file is the single
+   styling mechanism: no inline style may set a property a rule
+   or media query here also sets, and nothing here uses
+   !important.
+   ============================================================ */
 
-@theme {
-  /* ─── Deep Studio: Color Tokens (v3) ─── */
-  --color-primary: #2C4A3B;
-  --color-surface: #F5F1E8;
-  --color-surface-alt: #F0EBD8;
-  --color-text-on-dark: #F5F1E8;
-  --color-text-primary: #1A1A1A;
-  --color-text-secondary: #6e6e73;
-  --color-accent: #3F7A5C;
-  --color-accent-hover: #357456;
-  --color-border-light: rgba(44, 74, 59, 0.35);
-  --color-border-dark: rgba(245, 241, 232, 0.20);
-  --color-tag-live-bg: rgba(63, 122, 92, 0.10);
-  --color-tag-live-text: #3F7A5C;
-  --color-tag-dev-bg: rgba(255, 200, 0, 0.10);
-  --color-tag-dev-text: #9a7200;
-  --color-tag-planned-bg: rgba(110, 110, 115, 0.10);
-  --color-tag-planned-text: #6e6e73;
+/* ============================================================
+   1. TOKENS — design-language spec §4, §5, §6
+   ============================================================ */
+:root{
+  /* colour */
+  --bg:#0F1113;
+  --surface:#171A1D;
+  --surface-raised:#1E2226;
+  --text-primary:#EDEFF1;
+  --text-secondary:#A7AEB5;
+  --accent:#FF6A45;
+  --on-accent:#241006;
+  --border:#2A2F34;
+  --border-interactive:#646E75;
+  --status-live:#5ED6A4;
+  --on-status-live:#04241A;
 
-  /* ─── Deep Studio: Typography ─── */
-  --font-display: var(--font-space-grotesk), sans-serif;
-  --font-body: var(--font-inter), sans-serif;
-  --font-mono: var(--font-jetbrains-mono), monospace;
-  --font-sans: var(--font-inter), sans-serif;
+  /* project accents — interactive state only, never resting title */
+  --project-accent-1:#FF6A45;
+  --project-accent-2:#4FB3A4;
+  --project-accent-3:#E0787E;
 
-  /* ─── Deep Studio: Spacing ─── */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 32px;
-  --spacing-xl: 64px;
-  --spacing-2xl: 128px;
+  /* layout — one global content shell */
+  --content-max:1152px;
+  --gutter:20px;             /* --gutter-mobile */
 
-  /* ─── Deep Studio: Border Radius ─── */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
+  /* shape */
+  --radius-tag:8px;
+  --radius-media:12px;
+  --radius-card-sm:18px;
+  --radius-card:24px;
+  --radius-panel:26px;
+  --radius-mark:10px;
+  --radius-pill:999px;
+  --border-width:1px;
+  --focus-width:2px;
+  --focus-offset:2px;
+
+  /* motion */
+  --dur-micro:150ms;
+  --dur-hover:250ms;
+  --dur-card:350ms;
+  --dur-enter:450ms;
+  --dur-media:600ms;
+  --dur-rule:500ms;
+  --dur-panel:450ms;
+  --dur-twinkle:2400ms;
+  --marquee:26s;
+  --ease-standard:cubic-bezier(.16,.84,.3,1);
+}
+@media (min-width:640px){ :root{ --gutter:32px; } }   /* --gutter-wide */
+
+/* ============================================================
+   2. BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text-primary);
+  -webkit-font-smoothing:antialiased;
+}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1,h2,h3,p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+
+/* The font families load through next/font/google in pages/_app.js, which
+   scopes --font-space-grotesk / --font-inter / --font-jetbrains-mono to the
+   wrapper element it renders. The three family tokens are therefore declared
+   on the page shell, inside that scope, rather than on :root where those
+   variables do not resolve. Pages Router requirement, not a design change. */
+.app-shell{
+  --font-display:var(--font-space-grotesk),system-ui,sans-serif;
+  --font-body:var(--font-inter),system-ui,sans-serif;
+  --font-mono:var(--font-jetbrains-mono),ui-monospace,monospace;
+
+  font-family:var(--font-body);font-size:15px;line-height:1.65;
 }
 
-:root {
-  --color-primary: #2C4A3B;
-  --color-surface: #F5F1E8;
-  --color-surface-alt: #F0EBD8;
-  --color-text-on-dark: #F5F1E8;
-  --color-text-primary: #1A1A1A;
-  --color-text-secondary: #6e6e73;
-  --color-accent: #3F7A5C;
-  --color-accent-hover: #357456;
-  --color-border-light: rgba(44, 74, 59, 0.35);
-  --color-border-dark: rgba(245, 241, 232, 0.20);
-  --color-tag-live-bg: rgba(63, 122, 92, 0.10);
-  --color-tag-live-text: #3F7A5C;
-  --color-tag-dev-bg: rgba(255, 200, 0, 0.10);
-  --color-tag-dev-text: #9a7200;
-  --color-tag-planned-bg: rgba(110, 110, 115, 0.10);
-  --color-tag-planned-text: #6e6e73;
+:where(a,button,[tabindex]):focus-visible{
+  outline:var(--focus-width) solid var(--accent);
+  outline-offset:var(--focus-offset);
+  border-radius:4px;
 }
 
-/* ─── Body defaults ─── */
-body {
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.wrap{max-width:var(--content-max);margin:0 auto;padding-inline:var(--gutter)}
+section[id]{scroll-margin-top:88px}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  background:var(--accent);color:var(--on-accent);
+  padding:12px 20px;border-radius:var(--radius-pill);font-weight:500;
+}
+.skip:focus{left:var(--gutter);top:12px}
+
+/* ============================================================
+   3. TYPE SCALE — spec §5.2
+   ============================================================ */
+.t-display{font-family:var(--font-display);font-weight:700;font-size:40px;line-height:1.02;letter-spacing:-.04em}
+.t-h2{font-family:var(--font-display);font-weight:700;font-size:30px;line-height:1.06;letter-spacing:-.035em}
+.t-h3{font-family:var(--font-display);font-weight:700;font-size:24px;line-height:1.1;letter-spacing:-.03em}
+.t-h4{font-family:var(--font-display);font-weight:700;font-size:20px;line-height:1.15;letter-spacing:-.02em}
+.t-body-lg{font-size:16px;line-height:1.7}
+.t-body{font-size:15px;line-height:1.65}
+.t-body-sm{font-size:14px;line-height:1.6}
+.t-label{font-size:15px;font-weight:500;line-height:1.2}
+.t-meta{font-family:var(--font-mono);font-size:13px;line-height:1.4}
+.t-meta-sm{font-family:var(--font-mono);font-size:12px;line-height:1.3}
+.t-eyebrow{font-family:var(--font-mono);font-weight:500;font-size:13px;line-height:1.2;letter-spacing:.14em}
+@media (min-width:1024px){
+  .t-display{font-size:64px}
+  .t-h2{font-size:42px}
+  .t-h3{font-size:34px}
+  .t-h4{font-size:24px}
+  .t-body-lg{font-size:18px}
+  .t-body{font-size:16px}
+  .t-meta{font-size:14px}
+  .t-meta-sm{font-size:13px}
+  .t-eyebrow{font-size:14px}
+}
+.muted{color:var(--text-secondary)}
+
+/* ============================================================
+   4. NAVIGATION — component spec: NavBar / MenuTrigger
+   ============================================================ */
+/* fixed, transparent until scrolled */
+.nav{
+  position:fixed;inset-inline:0;top:0;z-index:50;
+  background:transparent;
+  border-bottom:var(--border-width) solid transparent;
+  transition:background-color 300ms,border-color 300ms,backdrop-filter 300ms;
+}
+.nav.is-scrolled{
+  background:rgba(15,17,19,.80);                       /* fallback */
+  background:rgb(from var(--bg) r g b / .80);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);                          /* the one authorized blur */
+  border-bottom-color:rgba(237,239,241,.05);
+  border-bottom-color:rgb(from var(--text-primary) r g b / .05);
+}
+.nav__inner{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:var(--content-max);margin:0 auto;
+  padding-inline:var(--gutter);padding-block:16px;
+}
+.nav__group{display:flex;align-items:center;gap:4px}
+
+.brand{display:flex;align-items:center;gap:12px}
+.mark{
+  width:30px;height:30px;border-radius:var(--radius-mark);background:var(--accent);
+  color:var(--on-accent);display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:700;font-size:14px;flex:none;
+}
+.brand__name{font-family:var(--font-display);font-weight:700;font-size:15px}
+@media (min-width:1024px){
+  .mark{width:34px;height:34px;font-size:15px}
+  .brand__name{font-size:17px}
 }
 
-/* ══════════════════════════════════════════════════
-   Hero — Profile image rounded-square (Deep Studio)
-   ══════════════════════════════════════════════════ */
+.nav__links{display:none}
+@media (min-width:768px){
+  .nav__links{display:flex;align-items:center;gap:4px}
+}
+.nav__link{color:var(--text-secondary);transition:color var(--dur-micro) linear;position:relative;
+  padding:8px 16px;border-radius:var(--radius-tag)}
+.nav__link:hover{color:var(--text-primary)}
+.nav__link[aria-current="true"]{color:var(--text-primary)}
+.nav__link[aria-current="true"]::after{
+  content:"";position:absolute;left:16px;right:16px;bottom:0;height:2px;background:var(--accent);
+}
+.cta-pill{
+  background:var(--accent);color:var(--on-accent);border-radius:var(--radius-pill);
+  padding:11px 22px;font-weight:500;display:inline-flex;align-items:center;gap:8px;
+}
+/* motion is opt-in per control — never applied to every .cta-pill */
+.cta-pill--lift,.cta-pill--scale{transition:transform var(--dur-hover) var(--ease-standard)}
+.cta-pill--lift svg{transition:transform var(--dur-hover) var(--ease-standard)}
+.cta-pill--lift:hover,.cta-pill--lift:focus-visible{transform:scale(1.03)}
+.cta-pill--lift:hover svg,.cta-pill--lift:focus-visible svg{transform:translate(2px,-2px)}
+.cta-pill--scale:hover,.cta-pill--scale:focus-visible{transform:scale(1.04)}
+.nav__cta{display:none}
+@media (min-width:768px){.nav__cta{display:inline-flex;margin-left:8px}}
 
-.profile-image-container {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  width: 100%;
-  max-width: 380px;
+.menu-trigger{
+  width:36px;height:36px;border-radius:var(--radius-tag);
+  border:var(--border-width) solid var(--border-interactive);
+  display:grid;place-items:center;color:var(--text-primary);
+  transition:background-color var(--dur-micro) linear;
+}
+.menu-trigger:hover{background:var(--surface-raised)}
+@media (min-width:768px){.menu-trigger{display:none}}
+
+/* mobile menu panel */
+.menu-panel{
+  position:fixed;inset:0;z-index:60;background:var(--surface);
+  display:flex;flex-direction:column;padding:0;
+  transform:translateY(-100%);opacity:0;
+  transition:transform var(--dur-panel) var(--ease-standard),opacity var(--dur-panel) var(--ease-standard);
+}
+.menu-panel[hidden]{display:none}
+.menu-panel.is-open{transform:translateY(0);opacity:1}
+.menu-panel__top{display:flex;align-items:center;justify-content:space-between;
+  padding:14px var(--gutter);border-bottom:var(--border-width) solid var(--border)}
+.menu-panel__close{
+  width:36px;height:36px;border-radius:var(--radius-tag);
+  background:var(--accent);color:var(--on-accent);display:grid;place-items:center;
+}
+.menu-panel__links{padding:26px var(--gutter);display:flex;flex-direction:column;gap:18px}
+.menu-panel__links a{font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:-.02em}
+.menu-panel__links a:last-child{color:var(--accent)}
+.menu-panel__foot{margin-top:auto;padding:0 var(--gutter) 32px;display:flex;flex-direction:column;gap:14px}
+.menu-panel__socials{display:flex;gap:10px}
+.menu-panel__socials .social{flex:1;width:auto;border-radius:var(--radius-pill)}
+.menu-panel .cta-pill{justify-content:center}
+/* Motion is opt-in: the hidden starting state exists only where motion is
+   allowed, so reduced motion needs no override to undo. See §10. */
+@media (prefers-reduced-motion:no-preference){
+  .menu-item{opacity:0;translate:0 12px}
+  .menu-panel.is-open .menu-item{animation:rise var(--dur-enter) var(--ease-standard) forwards}
+  .menu-panel.is-open .menu-item:nth-child(1){animation-delay:.16s}
+  .menu-panel.is-open .menu-item:nth-child(2){animation-delay:.22s}
+  .menu-panel.is-open .menu-item:nth-child(3){animation-delay:.28s}
+  .menu-panel.is-open .menu-item:nth-child(4){animation-delay:.34s}
 }
 
-.profile-image-frame {
-  position: absolute;
-  left: calc(var(--spacing) * -4);
-  top: calc(var(--spacing) * -4);
-  right: calc(var(--spacing) * 4);
-  bottom: calc(var(--spacing) * 4);
-  border: 2px solid var(--color-accent);
-  border-radius: 24px;
+/* ============================================================
+   5. HERO — spec §7.3, §7.4
+   ============================================================ */
+.hero{
+  position:relative;
+  overflow:hidden;                 /* clips the ambient circles at the hero boundary */
+}
+/* structured ground — a CSS-generated dot field, flat and still. Rendered as
+   its own inset layer rather than as the hero's own background so that
+   HeroDotField is a real component boundary; geometry and alpha are the
+   reference's, so the painted result is identical. */
+.hero__dots{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(237,239,241,.06) 1px,transparent 1px);
+  background-size:24px 24px;
+  background-position:0 0;
+}
+.hero__inner{
+  max-width:var(--content-max);margin:0 auto;
+  padding-inline:var(--gutter);
+  padding-top:112px;padding-bottom:64px;      /* clears the fixed nav */
+  display:grid;grid-template-columns:1fr;gap:40px;align-items:center;position:relative;z-index:1;
+}
+@media (min-width:640px){
+  .hero__inner{padding-top:144px;padding-bottom:96px}
+}
+@media (min-width:1024px){
+  .hero__inner{grid-template-columns:repeat(12,minmax(0,1fr));column-gap:40px}
+  .hero__text{grid-column:span 7}
+  .portrait{grid-column:span 5}
 }
 
-.profile-image-wrapper {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border-radius: 24px;
+.badge{
+  display:inline-flex;align-items:center;gap:9px;background:var(--surface);
+  border:var(--border-width) solid var(--border);border-radius:var(--radius-pill);
+  padding:8px 16px;color:var(--text-secondary);
+}
+.badge__dot{
+  width:8px;height:8px;border-radius:50%;background:var(--status-live);flex:none;
+  animation:twinkle var(--dur-twinkle) ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.55;transform:scale(.88)}
 }
 
-.profile-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
+.hero__headline{margin-top:20px}
+.hero__headline em{font-style:normal;color:var(--accent)}
+.hero__lede{margin-top:18px;max-width:520px;color:var(--text-secondary)}
+.hero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:28px}
+@media (max-width:767px){
+  .hero__actions .cta-pill{width:100%;justify-content:center}
+  .hero__socials{display:flex;gap:10px;width:100%}
+  .hero__socials .social{flex:1;width:auto;border-radius:var(--radius-pill)}
+}
+.hero__socials{display:flex;gap:10px}
+
+.social{
+  width:44px;height:44px;border-radius:50%;background:var(--surface);
+  border:var(--border-width) solid var(--border-interactive);
+  display:grid;place-items:center;color:var(--text-primary);
+  transition:color var(--dur-micro) linear,border-color var(--dur-micro) linear,
+             background-color var(--dur-micro) linear;
+}
+.social:hover,
+.social:focus-visible,
+.social:focus-within{
+  color:var(--accent);
+  border-color:rgba(255,106,69,.50);
+  border-color:rgb(from var(--accent) r g b / .50);
+  background:rgba(255,106,69,.10);
+  background:rgb(from var(--accent) r g b / .10);
+}
+/* the external ring remains the actual focus signal; the accent treatment
+   only makes hover and focus carry equivalent information */
+.social:focus-visible{outline:var(--focus-width) solid var(--accent);outline-offset:var(--focus-offset)}
+.social svg{width:21px;height:21px}
+
+/* portrait frame — spec §7.4
+   Anatomy: an offset accent outline with restrained angular displacement; a
+   clean inner image frame with a thin boundary; metadata over the bottom image
+   edge on the smallest flat backing required. The two hero-level ambient
+   circles are a separate element — see .hero__circles. */
+
+/* two hero-level ambient circles, independent of the portrait frame */
+.hero__circles{position:absolute;inset:0;pointer-events:none;z-index:0}
+.hero__circles span{position:absolute;border-radius:50%;border-style:solid;border-width:1px}
+.hero__circles .c-accent{
+  width:288px;height:288px;right:-96px;top:40px;
+  border-color:rgba(255,106,69,.20);
+  border-color:rgb(from var(--accent) r g b / .20);
+}
+.hero__circles .c-neutral{
+  width:160px;height:160px;right:96px;top:176px;
+  border-color:rgba(237,239,241,.05);
+  border-color:rgb(from var(--text-primary) r g b / .05);
 }
 
-/* Social icon buttons */
-.social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  color: var(--color-text-on-dark);
-  border-radius: var(--radius-full);
-  transition: background-color 200ms ease;
+.portrait{position:relative;z-index:1;width:100%;max-width:384px;margin-inline:auto}
+.portrait__offset{
+  position:absolute;inset:-12px;border-radius:24px;
+  border:1px solid rgba(255,106,69,.25);
+  border-color:rgb(from var(--accent) r g b / .25);
+  transform:rotate(-2deg);pointer-events:none;
+}
+.portrait__img{
+  position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:16px;
+  border:1px solid rgba(237,239,241,.10);
+  border-color:rgb(from var(--text-primary) r g b / .10);
+  background:var(--surface-raised);
+}
+.portrait__img img{width:100%;height:100%;object-fit:cover}
+.portrait__meta{
+  position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
+  padding:14px;gap:10px;pointer-events:none;
+}
+/* smallest flat backing required — measured against the real photograph, the
+   shirt behind both positions gives 1.08:1 and 1.26:1 unbacked. Flat --surface,
+   no border, tight padding: a backing, not a decorative pill. */
+.portrait__meta span{
+  background:var(--surface);color:var(--text-secondary);
+  border-radius:var(--radius-tag);padding:4px 8px;
 }
 
-.social-icon:hover {
-  background-color: rgba(245, 241, 232, 0.10);
+/* ============================================================
+   6. TOOLBOX — spec §7.6
+   ============================================================ */
+.toolbox{position:relative;border-block:var(--border-width) solid var(--border);overflow:hidden;padding-block:20px}
+.toolbox__track{display:flex;width:max-content;gap:10px;animation:marquee var(--marquee) linear infinite}
+/* Hover and focus-within no longer pause the strip: it keeps moving under the
+   pointer, matching the reference. The control below is the only thing that
+   changes the running state. */
+.toolbox__track.is-paused{animation-play-state:paused}
+@keyframes marquee{to{transform:translateX(-50%)}}
+/* right-edge fade so the control never sits on a chip */
+.toolbox__fade{
+  position:absolute;top:0;bottom:0;right:0;width:120px;z-index:3;pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--bg) 70%);
+}
+.toolbox__ctl{
+  position:absolute;right:12px;top:50%;translate:0 -50%;z-index:4;
+  width:34px;height:34px;border-radius:50%;padding:0;
+  background:var(--surface);border:var(--border-width) solid var(--border-interactive);
+  color:var(--text-secondary);display:grid;place-items:center;
+  transition:color var(--dur-micro) linear,border-color var(--dur-micro) linear;
+}
+.toolbox__ctl:hover,.toolbox__ctl:focus-visible{color:var(--accent);border-color:var(--accent)}
+.toolbox__ctl svg{width:16px;height:16px}
+.toolbox__set{display:flex;gap:10px;padding-right:10px}
+.chip{
+  display:flex;align-items:center;gap:9px;background:var(--surface);
+  border:var(--border-width) solid var(--border);border-radius:var(--radius-pill);
+  padding:11px 20px;white-space:nowrap;font-weight:500;
+}
+.chip svg{width:20px;height:20px;flex:none}
+
+/* ============================================================
+   7. SECTIONS
+   ============================================================ */
+.section{padding-block:56px}
+@media (min-width:1024px){.section{padding-block:72px}}
+
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--accent)}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--accent);flex:none}
+.section-head h2{margin-top:12px}
+
+/* ============================================================
+   7b. PROJECT GRID + CARD — spec §7.7, §7.8
+   ============================================================ */
+.grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media (min-width:1024px){
+  .grid{grid-template-columns:1.45fr 1fr}
+  .grid__col{display:flex;flex-direction:column;gap:18px}
+}
+@media (min-width:768px) and (max-width:1023px){
+  .grid__col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+}
+/* every project beyond the first three wraps into a full-width row of equal
+   compact cards below the grid — the one-large-plus-two-small proportion at
+   exactly three entries is unchanged */
+.grid__overflow{display:grid;grid-template-columns:1fr;gap:18px;margin-top:18px}
+@media (min-width:768px){.grid__overflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1024px){.grid__overflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.card{
+  --pc:var(--accent);
+  background:var(--surface);border:var(--border-width) solid var(--border);
+  border-radius:var(--radius-card-sm);overflow:hidden;display:flex;flex-direction:column;
+  transition:border-color var(--dur-card) var(--ease-standard),
+             transform var(--dur-card) var(--ease-standard);
+}
+/* the project accent is carried by a class, not an inline style object — the
+   reference sets --pc inline, which this build's single-styling-mechanism rule
+   forbids because .card also declares --pc */
+.card--accent-1{--pc:var(--project-accent-1)}
+.card--accent-2{--pc:var(--project-accent-2)}
+.card--accent-3{--pc:var(--project-accent-3)}
+@media (min-width:768px){.card{border-radius:var(--radius-card)}}
+/* the outer boundary stays neutral at every state and only strengthens.
+   The project accent takes the top rule and the title — never the card border. */
+.card:hover,.card:focus-within{border-color:var(--border-interactive);transform:translateY(-6px)}
+
+.card__rule{height:3px;background:var(--pc);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--dur-rule) var(--ease-standard)}
+.card:hover .card__rule,.card:focus-within .card__rule{transform:scaleX(1)}
+
+.card__media{position:relative;overflow:hidden;background:var(--surface-raised);aspect-ratio:16/9}
+.card--featured .card__media{aspect-ratio:16/10}
+/* the media well is a duplicate route to the project, so the link itself is
+   removed from the accessibility tree — but the status chip is a sibling of it,
+   not a descendant, so its text survives for assistive technology */
+.card__media-link{display:block;width:100%;height:100%}
+.card__media-inner{width:100%;height:100%;display:grid;place-items:center;color:var(--text-secondary);
+  transition:transform var(--dur-media) var(--ease-standard)}
+img.card__media-inner{object-fit:cover;display:block}
+.card:hover .card__media-inner,.card:focus-within .card__media-inner{transform:scale(1.06)}
+.card__media--empty .card__media-inner{
+  background:color-mix(in srgb,var(--pc) 12%,var(--surface-raised));
+}
+/* scoped to the centred project icon: the status chip is also a descendant of
+   the empty well, and must keep its own glyph size and colour */
+.card__media--empty .card__media-inner svg{width:40px;height:40px;color:var(--pc);opacity:.85}
+
+.status{
+  position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;
+  border-radius:var(--radius-pill);padding:5px 12px;font-size:12px;font-weight:500;
+}
+.status--live{
+  background:rgba(94,214,164,.10);
+  background:rgb(from var(--status-live) r g b / .10);
+  border:var(--border-width) solid rgba(94,214,164,.30);
+  border-color:rgb(from var(--status-live) r g b / .30);
+  color:var(--status-live);
+  font-family:var(--font-mono);letter-spacing:.08em;text-transform:uppercase;
+  font-size:12px;                       /* meta-sm: 12px mobile, 13px desktop */
+}
+/* Over an image-backed well the translucent tint composites against the
+   screenshot, not against --surface-raised: measured over the Numera capture
+   the label falls to 1.63:1 and the border to 1.12:1. An opaque --surface
+   backing restores it. Typography, geometry, border, label colour and
+   animation are identical in both forms — only the background differs. */
+.status--live-on-media{
+  background:var(--surface);
+}
+@media (min-width:1024px){.status--live{font-size:13px}}
+/* live glyph: solid centre dot inside a thin outer ring */
+.live-glyph{position:relative;width:12px;height:12px;flex:none;display:inline-block;
+  animation:livePulse 1400ms ease-in-out infinite}
+.live-glyph::before{content:"";position:absolute;inset:0;border-radius:50%;
+  border:var(--border-width) solid currentColor;opacity:.6}
+.live-glyph::after{content:"";position:absolute;inset:3.5px;border-radius:50%;background:currentColor}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.25}}
+.status--repo{background:var(--surface);border:var(--border-width) solid var(--border);color:var(--text-secondary)}
+.status svg{width:14px;height:14px;flex:none}
+
+.card__body{padding:18px;display:flex;flex-direction:column;flex:1;gap:8px}
+@media (min-width:1024px){.card--featured .card__body{padding:26px;gap:10px}}
+.card__title a{color:var(--text-primary);transition:color var(--dur-hover) var(--ease-standard)}
+.card:hover .card__title a,.card:focus-within .card__title a{color:var(--pc)}
+.card__title a:focus-visible{outline-color:var(--pc)}
+.card__desc{color:var(--text-secondary)}
+
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.tag{display:inline-flex;align-items:center;gap:7px;border:var(--border-width) solid var(--border);
+  border-radius:var(--radius-tag);padding:6px 10px;font-family:var(--font-mono);font-size:12px}
+.tag svg{width:15px;height:15px;flex:none}
+
+.card__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:16px}
+.btn-outline{
+  border:var(--border-width) solid var(--border-interactive);border-radius:var(--radius-pill);
+  padding:12px 22px;display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:14px;
+  transition:border-color var(--dur-micro) linear,color var(--dur-micro) linear;
+}
+.btn-outline:hover{color:var(--accent);border-color:var(--text-secondary)}
+.btn-outline svg{width:16px;height:16px;flex:none}
+.card__actions .cta-pill{padding:12px 22px;font-size:14px}
+
+/* ============================================================
+   7b-bis. PROJECT REPRESENTATION — Numera's card media.
+   Ported from numera-media-concepts-round2.html, concepts F, D, E.
+   The artifact is authored in a fixed 633 x 396 space; --u is one
+   artifact pixel, so every number below is the artifact's own and
+   resolves to 1px at a 633px-wide well.
+   ============================================================ */
+.rep-stage{position:absolute;inset:0;overflow:hidden;container-type:inline-size}
+.rep-layer{
+  position:absolute;inset:0;transform:translateX(100%);
+  transition:transform 600ms var(--ease-standard);will-change:transform;
+}
+.rep-layer.is-in{transform:translateX(0)}
+.rep-layer.is-out{transform:translateX(-100%)}
+.rep{position:absolute;inset:0;overflow:hidden;--u:calc(100cqw / 630)}
+.rep__paths{position:absolute;inset:0;width:100%;height:100%}
+
+/* ---- F: progression path ---- */
+/* Switch between the two forms of F, decided by the well's own inline size.
+   No script participates: the correct form is right on first paint and works
+   with JavaScript unavailable.
+
+   The default below is deliberately compact-wins. A browser without container
+   query support never matches the block underneath and is left with the
+   compact form — the legible one. Failing safe here means failing to compact. */
+.rep--f{background:#121417;display:none}
+@container (min-width: 630px){
+  .rep--f{display:block}
+  .rep--fc{display:none}
+}
+.rep__st{position:absolute;width:calc(150 * var(--u));display:flex;flex-direction:column;gap:calc(6 * var(--u))}
+.rep--f .rep__ic{
+  width:calc(36 * var(--u));height:calc(36 * var(--u));border-radius:calc(11 * var(--u));
+  display:grid;place-items:center;background:var(--surface-raised);
+  color:var(--text-secondary);border:var(--border-width) solid var(--border);
+}
+.rep--f .rep__ic svg{width:calc(18 * var(--u));height:calc(18 * var(--u))}
+.rep__st.is-on .rep__ic{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.rep__nm{font-family:var(--font-display);font-weight:700;font-size:calc(15 * var(--u));letter-spacing:-.01em}
+.rep__st:not(.is-on) .rep__nm{color:var(--text-secondary)}
+/* 11px -> 12px: this violated the stated 12px floor even at full desktop width */
+.rep__rg{font-family:var(--font-mono);font-size:calc(12 * var(--u));color:var(--text-secondary)}
+/* node one moved down 22px so the Live chip no longer overlaps its icon */
+.rep__st--1{left:calc(30 * var(--u));top:calc(48 * var(--u))}
+.rep__st--2{left:calc(194 * var(--u));top:calc(112 * var(--u))}
+.rep__st--3{left:calc(330 * var(--u));top:calc(198 * var(--u))}
+.rep__st--4{left:calc(462 * var(--u));top:calc(52 * var(--u))}
+.rep__legend{position:absolute;left:calc(30 * var(--u));bottom:calc(22 * var(--u));display:flex;gap:calc(18 * var(--u));align-items:center}
+.rep__lg{
+  display:flex;align-items:center;gap:calc(7 * var(--u));
+  font-family:var(--font-mono);font-size:calc(12 * var(--u));
+  color:var(--text-secondary);letter-spacing:.08em;
+}
+.rep__lg svg{width:calc(13 * var(--u));height:calc(13 * var(--u));flex:none}
+.rep__sw{width:calc(10 * var(--u));height:calc(10 * var(--u));border-radius:calc(3 * var(--u));background:var(--accent);flex:none}
+.rep__sw--lock{background:transparent;border:var(--border-width) solid var(--border-interactive)}
+
+/* ---- F, compact: the responsive form, authored natively at 350 x 219 ----
+   Geometry scales with the well through its own unit; the names do not scale
+   below 12px, which is the whole point of the variant. At the authored 350px
+   width max() resolves to exactly 12px. */
+.rep--fc{background:#121417;--u:calc(100cqw / 350)}
+.rep__cst{position:absolute;display:flex;flex-direction:column;gap:calc(5 * var(--u));width:calc(80 * var(--u))}
+.rep--fc .rep__ic{
+  width:calc(28 * var(--u));height:calc(28 * var(--u));border-radius:calc(9 * var(--u));
+  display:grid;place-items:center;background:var(--surface-raised);
+  color:var(--text-secondary);border:var(--border-width) solid var(--border);
+}
+.rep--fc .rep__ic svg{width:calc(15 * var(--u));height:calc(15 * var(--u))}
+.rep__cst.is-on .rep__ic{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.rep--fc .rep__nm{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(12px, calc(12 * var(--u)), 15px);line-height:1.25;letter-spacing:-.01em;
+}
+.rep--fc .rep__cst:not(.is-on) .rep__nm{color:var(--text-secondary)}
+.rep__cst--1{left:calc(18 * var(--u));top:calc(52 * var(--u))}
+.rep__cst--2{left:calc(112 * var(--u));top:calc(96 * var(--u))}
+.rep__cst--3{left:calc(196 * var(--u));top:calc(140 * var(--u))}
+.rep__cst--4{left:calc(266 * var(--u));top:calc(56 * var(--u));width:calc(66 * var(--u));align-items:flex-end;text-align:right}
+
+/* ---- D: the learning loop ---- */
+.rep--d{background:#121518}
+.rep__node{position:absolute;display:flex;flex-direction:column;gap:calc(7 * var(--u));width:calc(190 * var(--u))}
+.rep__cap{font-family:var(--font-mono);font-size:calc(11 * var(--u));letter-spacing:.16em;color:var(--text-secondary)}
+.rep__val{font-family:var(--font-display);font-weight:700;font-size:calc(19 * var(--u));letter-spacing:-.02em}
+.rep--d .rep__ic{
+  width:calc(34 * var(--u));height:calc(34 * var(--u));border-radius:calc(10 * var(--u));
+  background:rgba(255,106,69,.10);
+  background:rgb(from var(--accent) r g b / .10);
+  color:var(--accent);display:grid;place-items:center;
+}
+.rep--d .rep__ic svg{width:calc(18 * var(--u));height:calc(18 * var(--u))}
+.rep__node--1{left:calc(32 * var(--u));top:calc(30 * var(--u))}
+.rep__node--2{right:calc(32 * var(--u));top:calc(30 * var(--u));text-align:right;align-items:flex-end}
+.rep__node--3{right:calc(32 * var(--u));bottom:calc(30 * var(--u));text-align:right;align-items:flex-end}
+.rep__node--4{left:calc(32 * var(--u));bottom:calc(30 * var(--u))}
+.rep--d .rep__wv{display:flex;align-items:flex-end;gap:calc(4 * var(--u));height:calc(22 * var(--u))}
+.rep--d .rep__wv i{opacity:.8}
+.rep__wv i{width:calc(4 * var(--u));border-radius:calc(2 * var(--u));background:var(--accent)}
+.rep__centre{position:absolute;left:50%;top:50%;translate:-50% -50%;text-align:center}
+.rep__cn{font-family:var(--font-display);font-weight:700;font-size:calc(46 * var(--u));letter-spacing:-.04em;line-height:1}
+.rep__cw{font-family:var(--font-mono);font-size:calc(12 * var(--u));color:var(--text-secondary);letter-spacing:.1em;margin-top:calc(6 * var(--u))}
+.rep__caret{
+  display:inline-block;width:calc(2 * var(--u));height:calc(19 * var(--u));
+  background:var(--accent);translate:0 calc(3 * var(--u));margin-left:calc(3 * var(--u));
+}
+.rep__dots{display:flex;gap:calc(5 * var(--u))}
+.rep__dots i{width:calc(7 * var(--u));height:calc(7 * var(--u));border-radius:50%;border:var(--border-width) solid var(--border-interactive)}
+.rep__dots i.is-hit{background:var(--accent);border-color:var(--accent)}
+
+/* ---- E: layered numeral field ---- */
+/* flat ground: the design language rejects gradients and this one served no
+   function. Measured on it — Live label 8.44:1, text-primary 15.87:1,
+   text-secondary 8.16:1, accent 6.45:1. */
+.rep--e{background:#12151A}
+.rep__ghost{
+  position:absolute;font-family:var(--font-display);font-weight:700;
+  letter-spacing:-.05em;color:var(--text-primary);opacity:.045;line-height:1;
+}
+.rep__ghost--a{font-size:calc(150 * var(--u));left:calc(-14 * var(--u));top:calc(-16 * var(--u))}
+.rep__ghost--b{font-size:calc(96 * var(--u));right:calc(24 * var(--u));bottom:calc(-8 * var(--u))}
+.rep__lead{
+  position:absolute;left:calc(34 * var(--u));top:calc(96 * var(--u));
+  font-family:var(--font-display);font-weight:700;font-size:calc(64 * var(--u));
+  letter-spacing:-.045em;line-height:1;
+}
+.rep__lead span{color:var(--accent)}
+.rep__word{
+  position:absolute;left:calc(36 * var(--u));top:calc(172 * var(--u));
+  font-family:var(--font-display);font-weight:500;font-size:calc(20 * var(--u));color:var(--text-secondary);
+}
+.rep__mid{position:absolute;right:calc(34 * var(--u));top:calc(104 * var(--u));display:flex;flex-direction:column;gap:calc(9 * var(--u));align-items:flex-end}
+.rep__sm{font-family:var(--font-mono);font-size:calc(13 * var(--u));color:var(--text-secondary)}
+.rep__sm b{color:var(--text-primary);font-weight:500}
+.rep__base{
+  position:absolute;left:calc(34 * var(--u));right:calc(34 * var(--u));bottom:calc(30 * var(--u));
+  display:flex;align-items:flex-end;justify-content:space-between;gap:calc(24 * var(--u));
+}
+.rep--e .rep__wv{display:flex;align-items:flex-end;gap:calc(4 * var(--u));height:calc(40 * var(--u));flex:1}
+.rep--e .rep__wv i{opacity:.75}
+.rep__prog{display:flex;gap:calc(6 * var(--u));align-items:center}
+.rep__prog i{width:calc(26 * var(--u));height:calc(3 * var(--u));border-radius:calc(2 * var(--u));background:var(--border-interactive)}
+.rep__prog i.is-on{background:var(--accent)}
+.rep__tick{
+  position:absolute;left:calc(34 * var(--u));top:calc(44 * var(--u));
+  font-family:var(--font-mono);font-size:calc(11 * var(--u));letter-spacing:.16em;color:var(--text-secondary);
 }
 
-@media (max-width: 767px) {
-  .profile-image-container {
-    max-width: 300px;
-    margin: 0 auto;
-  }
+/* ============================================================
+   7c. PROJECT ROUTE (/numera) — minimal Phase 1 foundation.
+   Only what this composition needs; it reuses .status, .tags,
+   .cta-pill and .btn-outline rather than restating them.
+   ============================================================ */
+.project-page{padding-top:112px}
+@media (min-width:640px){.project-page{padding-top:144px}}
+.project-page__back{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:28px;
+  color:var(--text-secondary);transition:color var(--dur-micro) linear;
+}
+.project-page__back:hover{color:var(--text-primary)}
+.project-page__back svg{width:16px;height:16px;flex:none}
+.project-page h1{margin-top:12px}
+.project-page__lede{margin-top:16px;max-width:640px;color:var(--text-secondary)}
+.project-page__media{
+  position:relative;overflow:hidden;margin:28px 0 0;max-width:840px;
+  aspect-ratio:16/10;border-radius:var(--radius-media);background:var(--surface-raised);
+  border:var(--border-width) solid var(--border);
+}
+.project-page__media img{width:100%;height:100%;object-fit:cover}
+.project-page__tags{margin-top:24px}
+.project-page__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
 
-  .profile-image-frame {
-    left: -12px;
-    top: -12px;
-    right: -12px;
-    bottom: -12px;
-    border-radius: 20px;
-  }
+/* ============================================================
+   8. ABOUT / CONTACT / FOOTER
+   ============================================================ */
+#about{border-top:var(--border-width) solid var(--border)}
+.about__grid{display:grid;grid-template-columns:1fr;gap:32px}
+.about__intro h2{margin-top:12px}
+.about__body{margin-top:16px;color:var(--text-secondary)}
+.about__cards{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:1024px){
+  .about__grid{grid-template-columns:repeat(12,minmax(0,1fr));column-gap:40px;align-items:start}
+  .about__intro{grid-column:span 5}
+  .about__cards{grid-column:span 7;grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+.principle{
+  background:var(--surface);border:var(--border-width) solid var(--border);
+  border-radius:var(--radius-card-sm);padding:20px;
+  transition:border-color var(--dur-hover) var(--ease-standard);
+}
+/* pointer hover only — the card holds no focusable descendant */
+.principle:hover{
+  border-color:rgba(255,106,69,.30);
+  border-color:rgb(from var(--accent) r g b / .30);
+}
+.principle__icon{
+  width:40px;height:40px;border-radius:var(--radius-tag);display:grid;place-items:center;
+  color:var(--accent);
+  background:rgba(255,106,69,.10);
+  background:rgb(from var(--accent) r g b / .10);
+}
+.principle__icon svg{width:20px;height:20px}
+.principle__title{margin-top:14px;color:var(--text-primary)}
+.principle__body{margin-top:8px;color:var(--text-secondary)}
 
-  .profile-image-wrapper {
-    border-radius: 20px;
-  }
+.contact-card{
+  background:var(--surface);
+  border:var(--border-width) solid rgba(255,106,69,.20);      /* fallback */
+  border-color:rgb(from var(--accent) r g b / .20);
+  border-radius:var(--radius-panel);padding:32px 24px;
+}
+@media (min-width:1024px){.contact-card{padding:52px 48px}}
+.contact-card h2{margin-top:16px}
+.contact-card p{margin-top:14px;max-width:520px;color:var(--text-secondary)}
+.contact-card__actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:28px}
+
+.footer{border-top:var(--border-width) solid var(--border);padding-block:28px}
+.footer__inner{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+@media (min-width:768px){
+  .footer__inner{flex-direction:row;justify-content:space-between;text-align:left}
+}
+.footer__links{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;color:var(--text-secondary)}
+.footer__links a:hover{color:var(--text-primary)}
+.footer__right{display:flex;flex-direction:column;align-items:center;gap:14px}
+@media (min-width:768px){.footer__right{align-items:flex-end}}
+.footer__socials{display:flex;gap:10px}
+.footer .social{width:40px;height:40px}
+.hero__socials .social,.contact-card__actions .social{width:44px;height:44px}
+.footer .social svg{width:18px;height:18px}
+.footer .mark{width:28px;height:28px;font-size:13px}
+
+/* ============================================================
+   9. REVEAL / ENTRANCE
+   ============================================================ */
+/* The entrance moves elements with the independent `translate` property rather
+   than `transform`. A finished animation with fill:forwards keeps holding every
+   property it animates, at the animation cascade origin — which outranks any
+   rule. Animating `transform` here therefore pinned .card at translateY(0) and
+   silently defeated the card's own -6px hover lift once the reveal had run.
+   Keeping the two on separate properties lets both work. */
+@keyframes rise{to{opacity:1;translate:0 0}}
+
+/* Applied by script only after IntersectionObserver is confirmed active, and
+   only where motion is allowed. Stating the hidden starting state inside
+   `no-preference` rather than undoing it inside `reduce` means reduced motion
+   has nothing to override: content is simply never hidden in the first place.
+   That also keeps the CSS minifier from dropping the override as a redundant
+   initial value, which it does when the two are written the other way round. */
+@media (prefers-reduced-motion:no-preference){
+  .js-reveal .reveal{opacity:0;translate:0 30px}
+  .js-reveal .reveal.is-in{animation:rise var(--dur-enter) var(--ease-standard) forwards}
+  .js-enter .enter{opacity:0;translate:0 16px;animation:rise var(--dur-enter) var(--ease-standard) forwards}
+  .js-enter .enter:nth-of-type(1){animation-delay:0s}
+  .js-enter .e2{animation-delay:.08s}
+  .js-enter .e3{animation-delay:.16s}
+  .js-enter .e4{animation-delay:.24s}
+  .js-enter .e5{animation-delay:.32s}
 }
 
-/* ─── Hero grid responsive ─── */
-.hero-grid {
-  max-width: 100%;
-  margin: 0;
-}
-
-@media (max-width: 767px) {
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-    padding: 64px 24px !important;
-    gap: 40px !important;
-  }
-
-  .hero-headline {
-    font-size: 2.75rem !important;
-  }
-}
-
-/* ─── Section padding responsive ─── */
-@media (max-width: 767px) {
-  .section-inner {
-    padding: 64px 24px !important;
-  }
-}
-
-/* ─── Nav responsive ─── */
-@media (max-width: 767px) {
-  .nav-inner {
-    padding: 0 24px !important;
-  }
-
-  .nav-status {
-    display: none !important;
-  }
-}
-
-/* ─── Project detail page grid ─── */
-.projects-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-}
-
-@media (min-width: 768px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* ─── Button hover states ─── */
-.btn-primary:hover {
-  background-color: var(--color-accent-hover) !important;
-}
-
-.btn-outline:hover {
-  background-color: rgba(245, 241, 232, 0.10) !important;
-}
-
-/* ─── Nav link hover ─── */
-.nav-link:hover {
-  color: var(--color-accent) !important;
+/* ============================================================
+   10. REDUCED MOTION — spec §8.3
+   Ported whole from the reference build. Selectors for the project
+   card and toolbox track are inert until packet 2 adds those rules.
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js-enter .enter,.js-reveal .reveal,.js-reveal .reveal.is-in,
+  /* The entrance, reveal and menu-item starting states are declared inside
+     `no-preference` above, so there is nothing to undo for them here. */
+  .badge__dot{animation:none;opacity:1;transform:none}
+  .toolbox{overflow-x:auto}
+  .toolbox__track{animation:none;width:auto}
+  /* the concept sequence never runs under reduced motion; this only removes
+     the slide from the resting layer, which is Concept F */
+  .rep-layer{transition:none}
+  .card,.card__media-inner{transition:none}
+  .card:hover,.card:focus-within{transform:none}
+  .card:hover .card__media-inner,.card:focus-within .card__media-inner{transform:none}
+  .card__title a{transition:none}
+  .cta-pill--lift,.cta-pill--lift svg,.cta-pill--scale{transition:none}
+  .cta-pill--lift:hover,.cta-pill--lift:focus-visible,
+  .cta-pill--scale:hover,.cta-pill--scale:focus-visible{transform:none}
+  .cta-pill--lift:hover svg,.cta-pill--lift:focus-visible svg{transform:none}
+  .live-glyph{animation:none;opacity:1}
+  .principle{transition:none}
+  .card__rule{transform:scaleX(1);transition:none}
+  .menu-panel{transition:none}
+  .menu-panel.is-open{transform:none;opacity:1}
 }

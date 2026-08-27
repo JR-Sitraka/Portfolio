@@ -1,133 +1,156 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { TbArrowUpRight, TbBrandGithub, TbGitBranch } from "react-icons/tb";
+import ProjectRepresentation from "@/components/ProjectRepresentation";
+import { resolveTech } from "@/lib/iconMap";
 
-function NumbersIcon() {
+/** Solid centre dot inside a thin ring, both currentColor, so the glyph always
+ *  matches its label. Only the glyph animates; the chip is static. */
+function LiveGlyph() {
+  return <span className="live-glyph" aria-hidden="true" />;
+}
+
+/**
+ * StatusChip — states a project's real status, never implying more than exists.
+ *
+ * The Live variant has two backing forms, selected by what sits behind it.
+ * Over the dark empty-media well the translucent --status-live tint measures
+ * 7.21:1. Over an image-backed well that same tint composites against the
+ * screenshot instead: on the Numera capture it falls to 1.63:1, so an opaque
+ * --surface backing is used there and restores the label to 9.68:1. Everything
+ * else about the chip is identical between the two.
+ */
+/**
+ * `onMedia` selects the opaque backing, and is for **photographic** media only.
+ * A representation is a dark well, so it keeps the translucent form.
+ */
+function StatusChip({ status, onMedia }) {
+  if (status === "live") {
+    return (
+      <span className={`status status--live${onMedia ? " status--live-on-media" : ""}`}>
+        <LiveGlyph />
+        Live
+      </span>
+    );
+  }
+
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: "40px", height: "40px" }}>
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-      <path d="M8 15V9l-1.5 1" />
-      <path d="M12.5 10a1.5 1.5 0 1 1 2.6 1L12.5 15h3" />
-    </svg>
+    <span className="status status--repo">
+      <TbGitBranch aria-hidden="true" />
+      Repository
+    </span>
   );
 }
 
-function BrainIcon() {
+function TechTag({ name }) {
+  const resolved = resolveTech(name);
+  if (!resolved) return null;
+
+  const { icon: Icon, color } = resolved;
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: "36px", height: "36px" }}>
-      <path d="M12 5a2.5 2.5 0 0 0-4.9-.7A2.5 2.5 0 0 0 4.2 8 2.5 2.5 0 0 0 5 12.8 2.5 2.5 0 0 0 7.5 17c.9 0 1.7-.5 2.2-1.2.3.4.8.7 1.3.7V5Z" />
-      <path d="M12 5a2.5 2.5 0 0 1 4.9-.7A2.5 2.5 0 0 1 19.8 8a2.5 2.5 0 0 1-.8 4.8A2.5 2.5 0 0 1 16.5 17c-.9 0-1.7-.5-2.2-1.2-.3.4-.8.7-1.3.7" />
-    </svg>
+    <span className="tag">
+      <Icon color={color} aria-hidden="true" />
+      {name}
+    </span>
   );
 }
 
-function FolderIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: "36px", height: "36px" }}>
-      <path d="M4 5h5l2 2.5h9a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
-    </svg>
-  );
-}
+/**
+ * ProjectCard — featured and compact variants.
+ *
+ * Resting state: title --text-primary, outer border --border, accent top rule
+ * undrawn. On hover or focus within, the title takes the project accent, the
+ * top rule draws left to right, the media scales and the card lifts — while the
+ * outer border strengthens to --border-interactive and stays neutral. The
+ * accent never reaches the card frame.
+ *
+ * The media well and the title are the primary link. There is no invisible
+ * stretched overlay, and no non-interactive container takes a tabIndex.
+ */
+export default function ProjectCard({ project, featured = false }) {
+  const { title, status, description, accent, icon: ProjectIcon, media, tech, links } = project;
 
-export default function ProjectCard({ project, featured }) {
-  const shouldReduceMotion = useReducedMotion();
-  const cardLink = project.id === "numera" ? "/numera" : project.liveLink;
-  const showLink = Boolean(cardLink);
-  const Icon = project.id === "project-2" ? BrainIcon : project.id === "project-3" ? FolderIcon : null;
+  const primaryHref = links.live || links.repo;
+  const hasMedia = Boolean(media);
+  const isRepresentation = media?.type === "representation";
+  /* Only photographic media composites against unknown pixels and needs the
+     opaque chip backing. */
+  const chipOnPhotographicMedia = hasMedia && !isRepresentation;
+  /* the reference sets --pc through an inline style object; this build carries
+     it on a class instead, because .card also declares --pc and no inline style
+     may set a property a CSS rule also sets */
+  const accentClass = `card--${accent.replace(/^--project-/, "")}`;
 
   return (
-    <motion.article
-      initial={shouldReduceMotion ? {} : { opacity: 0, y: 16 }}
-      whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      whileHover={
-        shouldReduceMotion
-          ? {}
-          : {
-              y: -4,
-              backgroundColor: "var(--color-surface-alt)",
-              boxShadow: "0 8px 30px rgba(0, 0, 0, 0.08)",
-            }
-      }
-      transition={{
-        ease: [0.25, 0.1, 0.25, 1],
-        duration: shouldReduceMotion ? 0 : 0.3,
-      }}
-      className="project-card"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "var(--color-surface)",
-        border: "1px solid var(--color-primary)",
-        borderRadius: "16px",
-        padding: "32px",
-        ...(featured ? { gridRow: "span 2" } : {}),
-      }}
+    <article
+      className={`card${featured ? " card--featured" : ""} ${accentClass} reveal`}
     >
-      {featured ? (
-        <>
-          <NumbersIcon />
-          <h3
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "1.875rem",
-              fontWeight: 700,
-              lineHeight: 1.2,
-              letterSpacing: "-0.03em",
-              color: "var(--color-text-primary)",
-              margin: "32px 0 0 0",
-            }}
-          >
-            {project.title}
-          </h3>
-          <div style={{ marginTop: "auto", paddingTop: "40px" }}>
-            <a
-              href={cardLink}
-              target={project.id === "numera" ? undefined : "_blank"}
-              rel={project.id === "numera" ? undefined : "noopener noreferrer"}
-              className="project-card-link"
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--color-text-primary)",
-                textDecoration: "none",
-              }}
-            >
-              VIEW PROJECT <span aria-hidden="true">&rarr;</span>
-            </a>
-          </div>
-        </>
-      ) : (
-        <>
-          {Icon && <Icon />}
-          <h3
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "1.5rem",
-              fontWeight: 700,
-              lineHeight: 1.2,
-              letterSpacing: "-0.03em",
-              color: "var(--color-text-primary)",
-              margin: "24px 0 0 0",
-            }}
-          >
-            {project.title}
-          </h3>
-        </>
-      )}
+      <div className="card__rule" aria-hidden="true" />
 
-      <style>{`
-        .project-card-link:hover {
-          text-decoration: underline !important;
-        }
-        .project-card {
-          transition: background-color 200ms ease, box-shadow 200ms ease;
-        }
-        .project-card:hover {
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-      `}</style>
-    </motion.article>
+      {/* The well's link is a duplicate route to the same project as the title,
+          so it leaves the accessibility tree. The status chip is a sibling of
+          it rather than a descendant, so its text is not hidden with it. */}
+      <div className={`card__media${hasMedia ? "" : " card__media--empty"}`}>
+        <StatusChip status={status} onMedia={chipOnPhotographicMedia} />
+        {/* For a photographic or empty well the link is a duplicate route to
+            the same project and leaves the accessibility tree. A representation
+            must expose one stable description, so there the link stays in the
+            tree — still not a tab stop — and takes its name from the role="img"
+            inside it. */}
+        <a
+          className="card__media-link"
+          href={primaryHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex={-1}
+          {...(isRepresentation ? {} : { "aria-hidden": "true" })}
+        >
+          {isRepresentation ? (
+            <ProjectRepresentation sequence={media.sequence} alt={media.alt} />
+          ) : hasMedia ? (
+            <img className="card__media-inner" src={media.src} alt={media.alt} />
+          ) : (
+            <span className="card__media-inner">
+              <ProjectIcon aria-hidden="true" />
+            </span>
+          )}
+        </a>
+      </div>
+
+      <div className="card__body">
+        <h3 className={`${featured ? "t-h3" : "t-h4"} card__title`}>
+          <a href={primaryHref} target="_blank" rel="noopener noreferrer">{title}</a>
+        </h3>
+
+        <p className={`${featured ? "t-body" : "t-body-sm"} card__desc`}>{description}</p>
+
+        <div className="tags">
+          {tech.map((name) => <TechTag key={name} name={name} />)}
+        </div>
+
+        {featured && (
+          <div className="card__actions">
+            {links.live && (
+              <a
+                className="cta-pill cta-pill--scale t-label"
+                href={links.live}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Visit live <TbArrowUpRight aria-hidden="true" />
+              </a>
+            )}
+            {links.repo && (
+              <a
+                className="btn-outline"
+                href={links.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TbBrandGithub aria-hidden="true" />Repository
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
   );
 }

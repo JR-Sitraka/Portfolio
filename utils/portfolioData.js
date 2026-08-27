@@ -1,90 +1,119 @@
+import { TbCalculator, TbMap2, TbStack2 } from "react-icons/tb";
+import { iconMap } from "@/lib/iconMap";
+
+/**
+ * Builds a technology entry in the { name, icon, color, used } shape, resolving
+ * the mark and its brand colour through lib/iconMap.js so neither value is
+ * recorded twice and the two can never drift apart.
+ *
+ * `used: true` is what the toolbox filters on — a technology genuinely in use.
+ * `used: false` entries exist only as project tags and never reach the strip.
+ */
+const tech = (name, used) => ({
+  name,
+  icon: iconMap[name].icon,
+  color: iconMap[name].color,
+  used,
+});
+
 export const portfolioData = {
 
   seo: {
     metaTitle: "Sitraka JOSOA // Student Engineer",
     metaDescription: "Software engineer building responsive web and mobile architectures, scaling into AI engineering — LLMs, RAG, and Intelligent Agents.",
-    ogImage: "/image.jpg"
+    ogImage: "/portrait-sitraka-800.jpg"
   },
 
   profile: {
     name: "Sitraka JOSOA",
     initials: "JRS",
-    title: "STUDENT ENGINEER",
-    subtext: "Software engineer specialized in building responsive web and mobile architectures, currently scaling deep into the AI engineering pipeline — LLMs, RAG, and Intelligent Agents.",
-    avatarUrl: "/image.jpg",
     githubUrl: "https://github.com/JR-Sitraka",
     linkedinUrl: "https://linkedin.com/in/josoa-sitraka-3346652ab/",
     email: "sitrakaj9@gmail.com"
   },
 
+  /* The badge renders nothing when text is empty or expires has passed. */
+  availability: {
+    text: "Open to internships — September 2026",
+    expires: "2026-09-30T23:59:59+08:00"
+  },
+
   projects: [
     {
       id: "numera",
-      title: "Numera // Numbers in English",
-      category: "Educational Application",
-      status: "Live",
-      tech: ["Next.js", "Vercel"],
-      description: "A minimalist educational tool designed for non-native English speakers to rapidly learn, recognize, and translate numbers in English. Deployed as a web app on Vercel with an active mobile repository built using React Native.",
-      liveLink: "https://numera-v2.vercel.app/",
-      githubLink: "https://github.com/JR-Sitraka/Numera-V2",
-      iconUrl: "/icons/Numera.png"
+      title: "Numera",
+      status: "live",
+      description: "Learning to read and hear numbers in English, across web and mobile.",
+      accent: "--project-accent-1",
+      icon: TbCalculator,
+      /* The card media is a built representation, not a capture. One stable
+         description covers the whole F → D → E sequence; concept changes are
+         never announced. */
+      media: {
+        type: "representation",
+        primary: "F",
+        sequence: ["F", "D", "E"],
+        alt: "An illustration of Numera's four learning levels — The Basics, The Decades, The Hundreds and The Big Leagues — shown as a progression path with the first level unlocked."
+      },
+      /* Verified product evidence, shown on the detail route only. */
+      screenshots: [
+        {
+          src: "/media/numera-dashboard-1600x950.jpg",
+          alt: "The Numera web app showing four numbered learning levels, the first unlocked and the rest locked."
+        }
+      ],
+      tech: ["Next.js", "React Native", "Vercel"],
+      links: {
+        live: "https://numera-v2.vercel.app",
+        repo: "https://github.com/JR-Sitraka/Numera-V2"
+      },
+      featured: true
     },
     {
-      id: "project-2",
-      title: "Project Alpha // Architecture Node",
-      category: "System Logic",
-      status: "In Development",
-      tech: ["Python", "NumPy", "Flask"],
-      description: "[Modular Placeholder] A secondary codebase structure optimized for numerical computing operations and modular data arrays. Prepared for scaling into future LLM and vector indexing frameworks.",
-      liveLink: null,
-      githubLink: null,
-      iconUrl: "/icons/N2.png"
+      id: "trailhead",
+      title: "Trailhead",
+      status: "repository",
+      description: "Evidence-grounded repository mapping, search and cited answers.",
+      accent: "--project-accent-2",
+      icon: TbMap2,
+      media: null,
+      screenshots: [],
+      tech: ["TypeScript"],
+      links: {
+        repo: "https://github.com/JR-Sitraka/Trailhead"
+      },
+      featured: false
     },
     {
-      id: "project-3",
-      title: "Project Beta // Experimental Node",
-      category: "AI Pipeline Research",
-      status: "Planned Concept",
-      tech: ["Python", "Streamlit"],
-      description: "[Modular Placeholder] Engineered component layout reserved for an upcoming deployment of customized Retrieval-Augmented Generation (RAG) datasets or autonomous agent tools.",
-      liveLink: null,
-      githubLink: null,
-      iconUrl: "/icons/N1.png"
+      id: "starter-kit",
+      title: "Starter Kit V4.2",
+      status: "repository",
+      description: "A structured framework for AI-assisted software work through roles, playbooks and verification.",
+      accent: "--project-accent-3",
+      icon: TbStack2,
+      media: null,
+      screenshots: [],
+      tech: ["Markdown"],
+      links: {
+        repo: "https://github.com/JR-Sitraka/starter-kit-v4.2"
+      },
+      featured: false
     }
   ],
 
-  techStack: {
-    interface: [
-      { name: "Next.js", bgColor: "bg-[#dde8d0]" },
-      { name: "React.js", bgColor: "bg-[#d8e8e6]" },
-      { name: "React Native", bgColor: "bg-[#dde0ea]" },
-      { name: "JavaScript", bgColor: "bg-[#ede8d5]" },
-      { name: "CSS", bgColor: "bg-[#e8dde8]" }
-    ],
-    logic: [
-      { name: "Python", bgColor: "bg-[#d8e8d8]" },
-      { name: "NumPy", bgColor: "bg-[#d8e5e3]" },
-      { name: "Node.js", bgColor: "bg-[#dde8d5]" },
-      { name: "Flask", bgColor: "bg-[#e5e0db]" }
-    ],
-    infrastructure: [
-      { name: "Vercel", bgColor: "bg-[#dde0e3]" },
-      { name: "Streamlit", bgColor: "bg-[#ede5d8]" }
-    ],
-    tooling: [
-      { name: "Git", bgColor: "bg-[#ead8dd]", used: true },
-      { name: "GitHub Actions", bgColor: "bg-[#e3d8ea]", used: true },
-      { name: "Docker", bgColor: "bg-[#d8e3ea]", used: false },
-      { name: "OpenAI API", bgColor: "bg-[#d8ead8]", used: false },
-      { name: "LangChain", bgColor: "bg-[#eaead8]", used: false },
-      { name: "LlamaIndex", bgColor: "bg-[#e8ddd8]", used: false }
-    ]
-  },
-
-  labLogs: [
-    { date: "2026-06", event: "Completed architectural breakdown for portfolio deployment pipeline." },
-    { date: "2026-05", event: "Migrated Numera core application components to a responsive React Native environment." },
-    { date: "2026-04", event: "Successfully engineered and deployed Numera web prototype to Vercel." }
+  technologies: [
+    tech("Next.js",      true),
+    tech("React",        true),
+    tech("React Native", true),
+    tech("JavaScript",   true),
+    tech("CSS",          true),
+    tech("Python",       true),
+    tech("Node.js",      true),
+    tech("Vercel",       true),
+    tech("Git",          true),
+    /* project tags only — never rendered in the toolbox */
+    tech("TypeScript",   false),
+    tech("Markdown",     false)
   ]
 
 };

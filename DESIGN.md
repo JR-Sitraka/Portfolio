@@ -1,135 +1,206 @@
 ---
-name: Deep Studio
-description: Warm, forest-green-on-cream design system for a student engineer portfolio. Dark forest-green hero, cream body sections, minimal information-dense-on-demand cards. Modern and elegant — no gradients, no decorative noise, no video backgrounds.
-version: alpha (v3 — color + hero + card revision, see Revision Log)
+name: Graphite & ember
+description: Dark graphite portfolio surface with a single ember accent, one global 1152px shell, flat separation by hairline and surface value, and no emitted light. Phase 1, as built and verified.
+version: Phase 1 — implemented against reference build revision 10.1
 ---
+
+## What this document is
+
+The design system this repository actually implements, as built and verified — not as planned. It supersedes the "Deep Studio" v3 system entirely; none of that palette, hero treatment or card model survives.
+
+Every value below is either taken from `styles/globals.css` in this repository or measured on the running page. Where something was measured, the measurement and its verification tier are stated. Where something has not been verified, it is listed in "Known limitations" rather than implied to be done.
+
+The external design package (design language, component specifications, handoff, and the 1:1 reference build) lives outside this repository and is not committed. This file is the repository-facing distillation of it.
 
 ## Overview
 
-Deep Studio is built on a single structural idea: **one dramatic dark moment, then clarity**.
+One dark ground, one accent, and flat separation. Distinction comes from surface value and a 1px hairline — never from a shadow, glow, blur or gradient. There is no elevation system; there is a surface ladder. Nothing on the site emits light.
 
-The navigation and hero live on a deep forest-green surface. Everything below that — projects, stack, logs, footer — lives on a warm cream surface. The transition between them is the page's only dramatic move. Everything else earns its place through contrast ratios, spatial precision, and restraint.
+The accent is used sparingly and only to mean *this is the action* or *this is this project's identity*. Project accents are interactive-state colours: at rest every project title is `--text-primary`, every card border is `--border`, and every accent rule is undrawn.
 
-This version replaces v1's near-black/teal system entirely (not extends it, as the intermediate navy revision did — that revision was tested and discarded before shipping). The forest green now serves the role the near-black and navy previously did.
+Single theme. There is no light mode.
 
-This is not a dark-mode portfolio. It is a portfolio with one dark section. That distinction matters for implementation.
+## Colour tokens
 
-## Colors
+Defined on `:root` in `styles/globals.css`.
 
-WARNING: Values below are visual estimates from reference screenshots, not color-picked from a source file. Treat as a working draft — a proper eyedropper pass before calling this final is worth doing, not optional polish.
+```
+--bg                 #0F1113   page ground
+--surface            #171A1D   cards, chips, contact card, nav on scroll
+--surface-raised     #1E2226   media wells, inner panels
+--text-primary       #EDEFF1
+--text-secondary     #A7AEB5
+--accent             #FF6A45   ember
+--on-accent          #241006   text/icon on an accent fill
+--border             #2A2F34   decorative hairline only
+--border-interactive #646E75   the visible boundary of any interactive control
+--status-live        #5ED6A4
+--on-status-live     #04241A   retained token; not used by the Live chip
 
-**Dark zone — hero and navigation only:**
-- Background: `#2C4A3B` (deep forest green)
-- Text: cream/off-white, `#F5F1E8`
-- Structural elements (borders, icon strokes, decorative frames): `#2C4A3B` outline against the cream zone, or a lighter tint against itself
+--project-accent-1   #FF6A45   Numera
+--project-accent-2   #4FB3A4   Trailhead
+--project-accent-3   #E0787E   Starter Kit V4.2
+```
 
-**Light zone — all sections below the hero:**
-- Background: `#F5F1E8` (warm cream, not white, not blue-tinted — this supersedes both v1's white and the discarded v2 blue-tint)
-- Text: near-black charcoal, `#1A1A1A` (not pure black)
-- Card/component borders: thin `#2C4A3B` outline — structural, not decorative
-- Card background: same cream as page background, or a very slightly distinct tint — confirm visually once color-picked values are in, since screenshots suggested these may currently read as too similar (see Known Gaps)
+`--border` and `--border-interactive` are not interchangeable. Anything a user can click, tap or focus whose boundary is its only affordance uses `--border-interactive`.
 
-**Accent — interaction and highlights only:**
-- A lighter, more teal-leaning green, approximately `#3F7A5C`, used for: hover states, the highlighted phrase within hero subtext ("AI engineering"), link text ("VIEW PROJECT →")
-- Never used as a large background fill
+### Measured contrast — agent-verified on the built page
 
-**Status system (provisional — not yet used on the current card design, reserved for the future project-detail page):**
-- Kept deliberately off the single-hue system for the same reason as v2: status indicators need to be quickly distinguishable at a glance. Exact values to be defined when the detail page itself is designed.
+Every pair below was measured on the running page by reading the tokens off `document.documentElement` and computing WCAG ratios, not by trusting the token table. All pass.
+
+| Pair | Measured | Required |
+|---|---|---|
+| `--text-primary` on `--bg` | 16.41:1 | 4.5:1 |
+| `--text-primary` on `--surface` | 15.16:1 | 4.5:1 |
+| `--text-secondary` on `--bg` | 8.44:1 | 4.5:1 |
+| `--text-secondary` on `--surface` | 7.79:1 | 4.5:1 |
+| `--text-secondary` on `--surface-raised` | 7.14:1 | 4.5:1 |
+| `--accent` on `--bg` | 6.67:1 | 4.5:1 |
+| `--accent` on `--surface-raised` | 5.64:1 | 4.5:1 |
+| `--on-accent` on `--accent` | 6.42:1 | 4.5:1 |
+| Live label, translucent form over the empty well | 7.21:1 | 4.5:1 |
+| Live label, opaque form over the Numera screenshot | 9.68:1 | 4.5:1 |
+| `--project-accent-2` on `--surface` | 6.92:1 | 4.5:1 |
+| `--project-accent-3` on `--surface` | 5.95:1 | 4.5:1 |
+| `--border-interactive` on `--bg` | 3.63:1 | 3:1 |
+| `--border-interactive` on `--surface` | 3.35:1 | 3:1 |
+| `--border-interactive` on `--surface-raised` | 3.07:1 | 3:1 |
+| Accent icon on its own 10% tint | 5.41:1 | 4.5:1 |
+| Hero dot field, worst case: `--text-primary` on a dot | 14.51:1 | 4.5:1 |
+| Hero dot field, worst case: `--text-secondary` on a dot | 7.46:1 | 4.5:1 |
+| Hero dot field, worst case: `--accent` on a dot | 5.89:1 | 4.5:1 |
+| Hero dot field, worst case: `--border-interactive` on a dot | 3.21:1 | 3:1 |
+
+Four boundaries sit below 3:1 by design and are permitted because none is an interactive control's affordance and none carries state a user must perceive: `--border` on `--bg` (1.40:1), the principle card at rest (1.29:1) and on hover (1.63:1), and the Contact panel's accent tint (1.34:1). Where state matters, the focus ring carries it.
+
+### The Live chip has two backing forms
+
+Typography, geometry, border, label colour and animation are identical; only the background differs, and which one applies is decided by what sits behind the chip.
+
+- Over the dark empty-media well: `--status-live` at 10%, translucent — 7.21:1.
+- Over an image-backed well: opaque `--surface` — 9.68:1.
+
+The second form exists on measured evidence, not preference. Over the near-white Numera screenshot the translucent form measures 1.63:1 and its border 1.12:1. Any new image-backed media is measured against its own pixels before shipping.
+
+### Technology brand colours
+
+Resolved in `lib/iconMap.js`, which is the single source for both the mark and its colour. Eleven technologies; nine carry `used: true` and appear in the toolbox, two exist only as project tags.
+
+Monochrome brands (Next.js, Vercel, Markdown) render in `--text-primary`. One substitution is in the shipped set: CSS's authentic `#663399` measures 2.08:1 against `--surface` and fails the 3:1 non-text threshold, so `#9A6ED4` (4.62:1) is used. The visible label always carries the technology name, so identification never depends on colour.
 
 ## Typography
 
-Unchanged in family/role assignments from v1/v2. Two fonts, three roles. Load via `next/font/google`.
-- **Space Grotesk** — display headlines, card titles. Heavy weight, tight negative tracking.
-- **Inter** — all body copy, paragraphs, nav labels.
-- **JetBrains Mono** — section numbers (`01 //`), status labels, category tags, decorative small-caps text (e.g. "FOLLOW ME:"). Never used for body copy.
+Space Grotesk, Inter and JetBrains Mono, loaded through `next/font/google` in `pages/_app.js`. No web-font dependency is added.
 
-Rules unchanged: never mix Space Grotesk and JetBrains Mono in the same text element; section headers follow `[monospace number] // [CAPS TITLE IN MONO]`; all text left-aligned except the footer cluster.
+`pages/_app.js` renders a wrapper carrying next/font's CSS variables. The three family tokens — `--font-display`, `--font-body`, `--font-mono` — are declared on `.app-shell`, **inside** that wrapper, because at `:root` those variables do not resolve and every family token would compute to guaranteed-invalid. This is a Pages Router requirement, not a design decision.
 
-## Hero Section (revised this version)
+Scale, implemented as utility classes with the desktop column behind `@media (min-width:1024px)`:
 
-- **Image shape: rounded-square, NOT the v1/v2 parallelogram.** This is a deliberate, confirmed departure — see Revision Log for why. Do not reintroduce the clip-path parallelogram without an explicit decision to revert.
-- **Layered frame decoration:** an open-bracket outline shape (`#2C4A3B`), offset behind the image, visible peeking out from two corners — adapted from an external reference, restyled into this system's colors and restraint level (no added colors, no extra decoration beyond the single bracket outline).
-- **Intro line accent:** a short dash/rule mark next to "Hello there, I'm [name]," in the muted secondary color.
-- **Subtext highlight:** exactly one phrase within the hero's descriptive subtext rendered in the accent color (`#3F7A5C`) — currently "AI engineering." Do not highlight additional phrases; the restraint is the point.
-- **Social row:** a small "FOLLOW ME:" label (JetBrains Mono, small, uppercase) with outline-style icon links (GitHub, LinkedIn) — positioned below the two existing CTA buttons, not replacing them.
-- **Existing elements unchanged:** headline copy, subtext copy (aside from the one highlighted phrase), both CTA buttons, two-column layout.
+| Class | Desktop | Mobile |
+|---|---|---|
+| `.t-display` | 64px | 40px |
+| `.t-h2` | 42px | 30px |
+| `.t-h3` | 34px | 24px |
+| `.t-h4` | 24px | 20px |
+| `.t-body-lg` | 18px | 16px |
+| `.t-body` | 16px | 15px |
+| `.t-body-sm` | 14px | 14px |
+| `.t-label` | 15px | 15px |
+| `.t-meta` | 14px | 13px |
+| `.t-meta-sm` | 13px | 12px |
+| `.t-eyebrow` | 14px | 13px |
 
-## Project Cards (revised this version — fully minimal)
+Nothing renders below 12px. Monospace is restricted to the availability badge, technology tags and chips, the project-count label, portrait metadata, and the footer line — never a heading, paragraph, button label or project description.
 
-Deliberately stripped down from v1/v2's information-dense version:
-- **Contents, in order:** a small line-art icon (not a logo, not a screenshot — this is what structurally prevents the image-sizing bug found in the previous icon system), the project title, and — **only for real/live projects** — a `VIEW PROJECT →` text link at the bottom.
-- **Removed entirely from the card face:** description text, tech tag pills, status badges. This information is not deleted from the product — it's intended to live on the future per-project detail page (see Revision Log), not lost.
-- **Placeholder/not-yet-real projects:** icon and title only, no link — this is the honest fix for the `[Modular Placeholder]` text bug found during the original audit. There's no body text left to accidentally ship unfinished.
-- Card style: cream background, thin `#2C4A3B` border, rounded corners. Equal-width grid, unchanged from the original layout.
+## Layout
 
-## Project Detail Page (in progress — not yet built)
+One global shell for every section: `--content-max` 1152px, `--gutter` 20px rising to 32px from 640px up. The only exception is the toolbox strip's full-bleed outer background, which is deliberate.
 
-Structure and framing follow the reference closely, per explicit decision — only one section's *content* is redefined, not its position. Nothing else in this page's layout should be reinterpreted freely.
+```
+mobile   < 768px
+tablet   768px – 1023px
+desktop  ≥ 1024px
+```
 
-### Page structure
-1. **Main block** (large, primary position) — Numera web: title, description (deferred), tech tags, "Live" badge, demo media (deferred).
-2. **Related block** (smaller, adjacent position, same placement as the reference's secondary project cards) — Numera Mobile: title, tech tag (React Native), noted as a separate repository from the web version.
-3. **Access & Status block** (same frame and position as the reference's "Active Deployments" — content redefined, see below).
-4. **Project Notes block** (same position as the reference's "Project Lab Notes") — the two reused log entries.
+Shape and focus tokens: `--radius-tag` 8px, `--radius-media` 12px, `--radius-card-sm` 18px, `--radius-card` 24px, `--radius-panel` 26px, `--radius-mark` 10px, `--radius-pill` 999px, `--border-width` 1px, `--focus-width` 2px, `--focus-offset` 2px. There are no shadow tokens; that is a rule, not an omission.
 
-### Access & Status (replaces "Active Deployments" — confirmed decision)
-The reference's version was a multi-project uptime dashboard, which doesn't fit inside a single project's own page — and its green "online" dots would misrepresent a downloadable APK as a running live service, which it isn't. This section instead states plainly how to actually access each version:
+## Composition
 
-- **Web** — status dot: teal/"Live" color (reuses the existing Live tag color, since this genuinely is a live, running service). Primary link: Live Demo. Secondary link: GitHub Repo.
-- **Mobile** — status dot: amber/neutral (reuses the existing "In Development"-style tag color, deliberately *not* the live-green — a downloadable APK is not an online service). Label: "Downloadable (APK via GitHub)." Link: GitHub Repo.
+Section order: Navigation → Hero → Toolbox → Selected Work → About → Contact → Footer.
 
-No "What's Next" section — considered, explicitly declined.
+- **Navigation** — fixed, fully transparent at rest; past 24px of scroll it takes `--bg` at 80%, `backdrop-filter: blur(12px)` and a `--text-primary` 5% bottom border, all over 300ms. That blur is the single authorised exception to the no-blur rule.
+- **Hero** — twelve columns at ≥1024px, text spanning 7 and portrait 5 with a 40px gap; top padding 112px rising to 144px from 640px up. Behind the content sit a CSS dot field (1px dots on a 24px grid) and two ambient outlined circles (288px accent at 20%, 160px neutral at 5%), clipped by the hero.
+- **Portrait** — capped at 384px, 4:5 at every viewport, 16px radius with a `--text-primary` 10% hairline, and an offset accent outline at `inset:-12px` / `rotate(-2deg)` / 24px radius. Two metadata labels sit over the bottom edge on the smallest flat `--surface` backing the measurement demanded.
+- **Toolbox** — full-bleed strip between hairlines, 26s linear marquee, paused on hover and on keyboard focus, horizontally scrollable with the animation off under reduced motion. The duplicated set for the seamless loop is `aria-hidden`.
+- **Selected Work** — `1.45fr / 1fr` with an 18px gap at ≥1024px; featured full-width with compacts two-up at 768–1023px; single column below 768px, featured first. Projects beyond the first three wrap into a full-width row of equal compact cards below the grid. The count is derived from the array length and zero-padded.
+- **About** — twelve columns at ≥1024px: a five-column intro and three principle cards spanning seven, stacking below 1024px.
+- **Contact** — the one panel with a tinted boundary, `--accent` at 20%.
+- **Footer** — hairline, wordmark, link row, three social buttons at 40px, and a metadata line whose year is derived at render time.
 
-**Numera (web) block:**
-- Existing title, tech tags (Next.js, Vercel), "Live" badge, GitHub + Live Demo links — already known, reused as-is.
-- Description: deferred (see below).
+## Motion
 
-**Numera Mobile (related) block:**
-- A separate GitHub repository — NOT the same codebase as the web version.
-- Distribution: downloadable APK from that repo, surfaced via the Access & Status block above with an accurate (non-"Live") label.
-- Tech: React Native.
-- GitHub URL: not yet provided. **Blocking** — this block can't be built until it's supplied.
+```
+--dur-micro 150ms   --dur-hover 250ms   --dur-card 350ms   --dur-enter 450ms
+--dur-media 600ms   --dur-rule 500ms    --dur-panel 450ms  --dur-twinkle 2400ms
+--marquee 26s       --ease-standard cubic-bezier(.16,.84,.3,1)
+```
 
-**Project notes (reused, not invented):**
-Two existing homepage chronological-log entries are Numera-specific and will be surfaced here too (staying on the homepage log as well — not removed from there):
-- "Migrated Numera core application components to a responsive React Native environment."
-- "Successfully engineered and deployed Numera web prototype to Vercel."
+Hover motion on primary pills is opt-in per control, never a blanket `.cta-pill` rule: only the hero CTA (scale 1.03 with a 2px up-right arrow shift) and "Visit live" (scale 1.04, stationary arrow) carry it.
 
-**Deliberately deferred, not forgotten:**
-- **Final wording** for the Numera description and any other copy on this page. Held on purpose until other technical modifications to this page settle, since content may change as those land — do not write speculative copy in the meantime.
-- **Demo media** — a muted, looping video (not a literal `.gif` file — same visual effect, far smaller) showing the real app in use, to be provided later via screen recording. Must respect `prefers-reduced-motion`, per this system's existing Framer Motion principle.
+**Reduced motion is opt-in, in CSS, never a JavaScript toggle.** The hidden starting states for entrances and scroll reveals live inside `@media (prefers-reduced-motion: no-preference)`, so reduced motion has nothing to override and content is never hidden in the first place.
 
-**Note on scope:** Numera itself (the actual project) is separate work, only touched after the portfolio is finished. This page is being built as a *template/foundation* — structure and framing locked in now, real data (wording, recording, mobile URL) dropped in later without needing to rebuild the page itself.
+Two implementation notes worth keeping, both found by measurement rather than review:
 
-**Still needed before this page is fully populated:**
-1. Numera Mobile's GitHub repo URL.
-2. Final wording (deferred by choice).
-3. Demo recording (deferred by choice).
+1. The reveal animates the independent `translate` property, not `transform`. A finished animation with `fill: forwards` keeps holding every property it animates at the animation cascade origin, which outranks any rule — animating `transform` silently defeated the card's own −6px hover lift once the reveal had run.
+2. The inversion in the paragraph above is not stylistic. Written the other way round — hidden by default, undone under `reduce` — the CSS minifier dropped the `translate` override as a redundant initial value, leaving revealed cards stuck 30px low under reduced motion.
 
-## Layout, Elevation, Components (unchanged from v1/v2)
+Revealed content is visible by default in markup and CSS; the hidden state is applied by script only after the IntersectionObserver is confirmed active. With JavaScript unavailable the page renders complete — verified directly: in a browser surface where React never hydrated, every revealed element rendered at full opacity with no offset.
 
-Max content width `1200px`, `64px`/`24px` padding desktop/mobile. Shadow only on light-surface hover states (`0 8px 30px rgba(0,0,0,0.08)`), never on dark surfaces. Tech cards and lab-log timeline unchanged in structure — only their color tokens shift to this version's palette (border `#2C4A3B` at low opacity in place of the previous neutral or navy-tinted hairline).
+## Accessibility
 
-## Do's and Don'ts
+- One `h1` (the hero), `h2` per section, `h3` per project and per principle card. Eyebrow labels are not headings.
+- A skip link is the first focusable element and targets the main landmark.
+- Every icon-only control carries an explicit `aria-label`; every decorative glyph is `aria-hidden`.
+- The mobile menu is a `role="dialog"` with `aria-modal`, an accessible name, a focus trap, Escape to close, body scroll lock, and removal from the accessibility tree when closed.
+- The menu trigger's accessible name tracks its state — "Open menu" / "Close menu" — alongside `aria-expanded`.
+- Focus rings are 2px `--accent` at 2px offset, and project card title links take their own project accent.
+- The status chip sits outside the media well's `aria-hidden` link, so its text survives in the accessibility tree.
 
-- Keep `#2C4A3B` as the only dark-zone background — hero and nav only
-- Use the accent green only on hover/interactive/highlighted-phrase elements
-- Use simple line-art icons for project cards — never logos or screenshots, structurally avoids the prior sizing bug
-- Keep the rounded-square image shape — the parallelogram is retired, not toggled per-page
-- Never add gradients, glows, blurs, or backdrop filters
-- Never show description text or tech tags directly on a project card face
-- Never ship placeholder/lorem-style text to production — an icon-and-title-only card with no link is the correct empty state, not a card with placeholder body copy
+## Data model
 
-## Known implementation gaps (as of this revision)
+All content comes from `utils/portfolioData.js`. Adding a project is a data edit; it requires no layout or style change.
 
-- The `01 //` numbering prefix is missing from the "SELECTED EXPERIMENTS" header in the current build — every other section on the page has one, this one doesn't yet. Small, cheap fix, deliberately deferred rather than spent this round.
-- Card background vs. page background may currently be too visually similar — worth a real check once exact colors are picked (see the warning under Colors).
-- The project-detail page (expand -> demo + related + status + notes) is scoped and agreed on, but not yet designed. Description text, tech tags, and status info removed from the card face are not implemented anywhere yet — this is real, temporarily-missing functionality, not just a card simplification.
+```
+project: { id, title, status: "live" | "repository", description, accent, icon,
+           media: null | { type, src, poster?, alt }, tech: [name],
+           links: { live?, repo }, featured: boolean }
 
-## Revision Log
+technology: { name, icon, color, used: boolean }
 
-**v3 (this revision):** Full color system replaced — forest green/cream, not an extension of v1's teal accent (unlike the v2 navy attempt, which kept `#00b4d8` as a preserved thread; this version's palette wasn't chosen to extend v1, it was chosen fresh). Hero gained a layered frame decoration, dash accent, one highlighted subtext phrase, and a social-links row. Profile image shape deliberately changed from the v1/v2 parallelogram to a rounded square — this was an explicit, confirmed trade-off, not an oversight; the parallelogram is retired. Project cards stripped from information-dense to fully minimal — description/tags/status moved conceptually to a not-yet-built detail page, not deleted from the product.
+availability: { text, expires }
+```
 
-**v2 (tested, discarded before shipping):** A navy-to-pale-blue tonal ramp extending v1's teal accent. Mocked in v0, rejected on sight before any code shipped — kept here only as a record that it was considered, not as history worth reviving.
+`media` is either `null` or an object; `type` is never `null`. Exactly one project is `featured`. The availability badge renders nothing when `text` is empty or `expires` has passed. Year, role, statistics and taglines are deliberately absent from the model.
 
-**v1:** Original near-black/white/teal system with the parallelogram signature image shape (see git history for the original file).
+## Stack
+
+Next.js (Pages Router) with React, `styles/globals.css` as the single styling mechanism, `next/font/google` for the three families, `react-icons` for brand and interface glyphs, and Framer Motion present as a dependency. Tailwind was removed once no consumer remained.
+
+Two rules hold across the stylesheet and every component:
+
+1. No inline `style` sets a property that a CSS rule or media query also sets. This was the direct cause of the previous site's hero headline being stuck at 3rem at 1280px.
+2. No `!important` anywhere.
+
+## Known limitations
+
+Stated plainly rather than passed by default.
+
+- **Project video is unverified and unverifiable.** The model supports it; no video asset exists for any project, so nothing has ever exercised that path.
+- **No dedicated social-preview image.** `seo.ogImage` points at `/portrait-sitraka-800.jpg` in the interim; a 1200×630 image is later work.
+- **Trailhead and Starter Kit V4.2 are provisional selections** pending Phase 2, and both deliberately use the designed empty-media state.
+- **`/numera` is a structural foundation, not a case study.** It renders only verified data already in `portfolioData.js`. The real case-study design and content are Phase 2.
+- **Navigation links on `/numera` are same-page fragments** that have no targets on that route. This is a known open question about how navigation should behave off the home page, recorded rather than silently patched.
+- **No systematic screenshot capture set** across the full viewport × data-state × motion-mode matrix.
+- **Reduced motion has never been verified against a real operating-system setting** — only by forcing the media condition in the browser.
+- **No Safari or real-device pass** has been performed.
+- **The portrait is an AI-edited derivative**, approved knowingly as a recorded one-off exception. Further generation, facial or body modification, retouching and substitution remain prohibited.

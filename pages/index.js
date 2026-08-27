@@ -1,22 +1,46 @@
+import { useEffect } from "react";
 import Head from "next/head";
+import SkipLink from "@/components/SkipLink";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import ProjectCard from "@/components/ProjectCard";
-import TechCard from "@/components/TechCard";
-import LabLogs from "@/components/LabLogs";
-import Footer from "@/components/Footer";
+import ToolboxStrip from "@/components/ToolboxStrip";
+import ProjectGrid from "@/components/ProjectGrid";
+import AboutSection from "@/components/AboutSection";
+import ContactCard from "@/components/ContactCard";
+import SiteFooter from "@/components/Footer";
 import { portfolioData } from "@/utils/portfolioData";
 
 export default function Home() {
-  const { seo, projects, techStack } = portfolioData;
+  const { seo, projects, technologies } = portfolioData;
 
-  // Group tech manifest rows according to the specification
-  const stackRows = [
-    { label: "Interface Layer", items: techStack.interface },
-    { label: "Logic & Compute Layer", items: techStack.logic },
-    { label: "Deployment & Infrastructure Layer", items: techStack.infrastructure },
-    { label: "Tooling & Workflow Layer", items: techStack.tooling.filter(t => t.used) }
-  ];
+  /* Revealed content is visible by default in markup and CSS. The hidden
+     state is applied by script only once the observer is confirmed active,
+     so a page without JavaScript renders complete rather than blank. */
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) return undefined;
+
+    const root = document.documentElement;
+    root.classList.add("js-enter", "js-reveal");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.1 }
+    );
+
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+    return () => {
+      observer.disconnect();
+      root.classList.remove("js-enter", "js-reveal");
+    };
+  }, []);
 
   return (
     <>
@@ -30,101 +54,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div style={{ display: "flex", minHeight: "100vh", flexDirection: "column" }}>
-        {/* Navigation Header */}
+      <div className="app-shell">
+        <SkipLink />
         <Nav />
 
-        {/* Core Layout Containers */}
-        <main style={{ flex: 1, backgroundColor: "var(--color-surface)" }}>
-          {/* Hero Section */}
+        <main id="main">
           <Hero />
 
-          {/* Selected Experiments Section */}
-          <section
-            id="projects"
-            style={{ borderTop: "1px solid var(--color-border-light)" }}
-          >
-            <div style={{ padding: "96px 40px" }} className="section-inner">
-              <h2
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.75rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "var(--color-text-secondary)",
-                  marginBottom: "48px",
-                }}
-              >
-                <span style={{ color: "var(--color-text-secondary)" }}>01</span>
-                {" "}
-                <span style={{ color: "var(--color-text-primary)" }}>// SELECTED EXPERIMENTS</span>
-              </h2>
-              <div className="projects-grid">
-                {projects.map((project, index) => (
-                  <ProjectCard key={project.id} project={project} featured={index === 0} />
-                ))}
-              </div>
-            </div>
-          </section>
+          <ToolboxStrip technologies={technologies} />
+          <ProjectGrid projects={projects} />
 
-          {/* System Layer Manifest Section */}
-          <section
-            id="stack"
-            style={{ borderTop: "1px solid var(--color-border-light)" }}
-          >
-            <div style={{ padding: "96px 40px" }} className="section-inner">
-              <h2
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.75rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "var(--color-text-secondary)",
-                  marginBottom: "48px",
-                }}
-              >
-                <span style={{ color: "var(--color-text-secondary)" }}>02</span>
-                {" "}
-                <span style={{ color: "var(--color-text-primary)" }}>// SYSTEM LAYER MANIFEST</span>
-              </h2>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
-                {stackRows.map((row, index) => (
-                  <div key={index} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                    <h3
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "0.75rem",
-                        fontWeight: 500,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        color: "var(--color-text-secondary)",
-                        margin: 0,
-                      }}
-                    >
-                      {row.label}
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-                      {row.items.map((tech, techIdx) => (
-                        <TechCard key={techIdx} tech={tech} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Lab Chronology Section */}
-          <LabLogs />
+          <AboutSection />
+          <ContactCard />
         </main>
 
-        {/* Footer Connections */}
-        <Footer />
+        <SiteFooter />
       </div>
-
     </>
   );
 }

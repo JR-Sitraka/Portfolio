@@ -21,10 +21,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export default function App({ Component, pageProps }) {
   return (
-    <div
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} min-h-screen`}
-      style={{ fontFamily: "var(--font-body)" }}
-    >
+    /* This wrapper exists only to scope next/font's CSS variables. The family
+       tokens that consume them are declared on .app-shell, inside this scope;
+       the former inline fontFamily here referenced --font-body from outside
+       its own declaration scope and silently did nothing. */
+    <div className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <Component {...pageProps} />
     </div>
   );
