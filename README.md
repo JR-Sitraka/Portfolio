@@ -19,4 +19,4 @@ npm run dev
 
 The site is then at http://localhost:3000.
 
-A redesign is in progress on the `redesign/graphite-ember` branch.
+The Graphite & ember visual system is documented in [`DESIGN.md`](./DESIGN.md).
