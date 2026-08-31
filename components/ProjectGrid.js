@@ -9,8 +9,13 @@ import ProjectCard from "@/components/ProjectCard";
  * dropped — adding a project is a data edit.
  *
  * The count is derived from the array length, zero-padded to two digits.
+ *
+ * `caseHrefs` maps a project id to its internal case-study route, and contains
+ * only projects whose case study is published. A card with no entry is passed
+ * no caseHref and behaves exactly as it does today. Grouping and order are not
+ * affected by it — featured, rightColumn and overflow are unchanged.
  */
-export default function ProjectGrid({ projects }) {
+export default function ProjectGrid({ projects, caseHrefs = {} }) {
   const featured = projects.find((project) => project.featured);
   const rest = projects.filter((project) => project !== featured);
 
@@ -30,11 +35,13 @@ export default function ProjectGrid({ projects }) {
       </div>
 
       <div className="grid">
-        {featured && <ProjectCard project={featured} featured />}
+        {featured && (
+          <ProjectCard project={featured} featured caseHref={caseHrefs[featured.id]} />
+        )}
 
         <div className="grid__col">
           {rightColumn.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard key={project.id} project={project} caseHref={caseHrefs[project.id]} />
           ))}
         </div>
       </div>
@@ -42,7 +49,7 @@ export default function ProjectGrid({ projects }) {
       {overflow.length > 0 && (
         <div className="grid__overflow">
           {overflow.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard key={project.id} project={project} caseHref={caseHrefs[project.id]} />
           ))}
         </div>
       )}

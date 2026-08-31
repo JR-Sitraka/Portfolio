@@ -1,0 +1,42 @@
+.callout{
+  margin-block:32px;
+  padding:20px 22px;
+  background:var(--surface);
+  border:var(--border-width) solid var(--border);
+  border-left-width:3px;
+  border-radius:var(--radius-media);
+}
+
+/* The three variants differ only in the accent carried on the leading edge.
+   Each colour is an existing token; none is a new literal. */
+.note{ border-left-color:var(--border-interactive); }
+.limitation{ border-left-color:var(--accent); }
+.boundary{ border-left-color:var(--project-accent-2); }
+
+.heading{
+  margin-bottom:12px;
+  color:var(--text-primary);
+}
+
+.body p{
+  margin-block:12px;
+  color:var(--text-secondary);
+}
+
+.body ul,
+.body ol{
+  margin-block:12px;
+  padding-left:22px;
+  color:var(--text-secondary);
+}
+
+.body ul{ list-style:disc; }
+.body ol{ list-style:decimal; }
+
+.body li{ margin-block:6px; }
+
+.body code{
+  font-family:var(--font-mono);
+  font-size:.9em;
+  color:var(--text-primary);
+}

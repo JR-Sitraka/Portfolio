@@ -65,10 +65,18 @@ function TechTag({ name }) {
  * The media well and the title are the primary link. There is no invisible
  * stretched overlay, and no non-interactive container takes a tabIndex.
  */
-export default function ProjectCard({ project, featured = false }) {
+export default function ProjectCard({ project, featured = false, caseHref }) {
   const { title, status, description, accent, icon: ProjectIcon, media, tech, links } = project;
 
-  const primaryHref = links.live || links.repo;
+  /* With a case study published for this project the media well and the title
+     lead to it, in the current tab, as an internal route. Without one they keep
+     today's behaviour exactly: the external live or repository destination, in
+     a new tab. links.live and links.repo are never overwritten either way, and
+     the CTA row below stays external in both states. */
+  const primaryHref = caseHref || links.live || links.repo;
+  const externalLinkProps = caseHref
+    ? {}
+    : { target: "_blank", rel: "noopener noreferrer" };
   const hasMedia = Boolean(media);
   const isRepresentation = media?.type === "representation";
   /* Only photographic media composites against unknown pixels and needs the
@@ -98,8 +106,7 @@ export default function ProjectCard({ project, featured = false }) {
         <a
           className="card__media-link"
           href={primaryHref}
-          target="_blank"
-          rel="noopener noreferrer"
+          {...externalLinkProps}
           tabIndex={-1}
           {...(isRepresentation ? {} : { "aria-hidden": "true" })}
         >
@@ -117,7 +124,7 @@ export default function ProjectCard({ project, featured = false }) {
 
       <div className="card__body">
         <h3 className={`${featured ? "t-h3" : "t-h4"} card__title`}>
-          <a href={primaryHref} target="_blank" rel="noopener noreferrer">{title}</a>
+          <a href={primaryHref} {...externalLinkProps}>{title}</a>
         </h3>
 
         <p className={`${featured ? "t-body" : "t-body-sm"} card__desc`}>{description}</p>

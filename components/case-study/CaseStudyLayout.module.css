@@ -1,0 +1,64 @@
+/* The page frame. Width comes from the global .wrap shell so a case study
+   measures the same as every other page; nothing here re-declares it. */
+
+.page{
+  padding-bottom:24px;
+}
+
+.header{
+  max-width:72ch;
+  margin-bottom:8px;
+}
+
+.hero{
+  margin-top:16px;
+  color:var(--text-secondary);
+}
+
+.hero code{
+  font-family:var(--font-mono);
+  color:var(--text-primary);
+}
+
+.inShort{
+  margin-top:32px;
+  padding:20px 22px;
+  background:var(--surface);
+  border:var(--border-width) solid var(--border);
+  border-radius:var(--radius-card-sm);
+}
+
+.inShortLabel{
+  margin-bottom:12px;
+  color:var(--text-secondary);
+}
+
+.inShortList{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding-left:22px;
+  list-style:disc;
+  color:var(--text-secondary);
+}
+
+.inShortList code{
+  font-family:var(--font-mono);
+  color:var(--text-primary);
+}
+
+.body{
+  max-width:72ch;
+}
+
+/* Tables and code blocks are allowed the full measure; running prose is not,
+   because a long line is harder to read than a wide table. */
+.body > * > .scroll,
+.body pre{
+  max-width:none;
+}
+
+@media (min-width:1024px){
+  .page{ padding-bottom:40px; }
+  .inShort{ padding:24px 28px; }
+}

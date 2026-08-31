@@ -9,9 +9,18 @@ import AboutSection from "@/components/AboutSection";
 import ContactCard from "@/components/ContactCard";
 import SiteFooter from "@/components/Footer";
 import { portfolioData } from "@/utils/portfolioData";
+import { publishedCaseStudies } from "@/utils/caseStudies";
 
 export default function Home() {
   const { seo, projects, technologies } = portfolioData;
+
+  /* Only the manifest is read here — slug, order and publication state, never
+     case-study content, so no case module can reach the homepage bundle. The
+     map is empty while every flag is false, and a card with no entry keeps
+     today's external behaviour. */
+  const caseHrefs = Object.fromEntries(
+    publishedCaseStudies().map((entry) => [entry.projectId, `/case/${entry.slug}`])
+  );
 
   /* Revealed content is visible by default in markup and CSS. The hidden
      state is applied by script only once the observer is confirmed active,
@@ -62,7 +71,7 @@ export default function Home() {
           <Hero />
 
           <ToolboxStrip technologies={technologies} />
-          <ProjectGrid projects={projects} />
+          <ProjectGrid projects={projects} caseHrefs={caseHrefs} />
 
           <AboutSection />
           <ContactCard />
